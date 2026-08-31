@@ -66,6 +66,40 @@ reuses them and Typst content cannot be converted back to a string.
 Section headings automatically get an `id` and a `¶` permalink anchor, and the
 sidebar table of contents is derived from the same headings.
 
+### Citations
+
+Give the post a `bib` field — bytes of Hayagriva YAML, or a path to a `.yml` /
+`.bib` file — and cite with `@key` in the body:
+
+```typst
+#let bib-data = bytes("
+sipser3rd:
+  type: book
+  title: Introduction to the Theory of Computation
+  author: Sipser, Michael
+  date: 2013
+")
+
+#let post = (
+  bib: bib-data,
+  // bib-style: "chicago-notes",   // the default
+  body: [ According to Sipser @sipser3rd[p.~35], … ],
+)
+```
+
+With the default `chicago-notes` style each citation becomes a footnote,
+numbered in one sequence with the ordinary footnotes, carrying the full
+reference. The reference list Typst also emits is therefore redundant and is
+hidden by `style.css` — it stays in the markup because the footnotes link into
+it, and because `show bibliography: none` breaks with "failed to determine link
+anchor". Switch `bib-style` to something like `"ieee"` for inline `[1]`-style
+citations; you would then want to unhide `section[role="doc-bibliography"]`.
+
+Two Typst 0.15 quirks worth knowing: anything outside the `post` dictionary in
+a post file is discarded (the file is imported, not included), so a bare
+`#bibliography(...)` there does nothing; and `#quote(attribution: [@key])`
+renders no attribution at all unless the quote is `block: true`.
+
 ### Images
 
 Typst's own `#image()` inlines the file as a base64 data URI — a 4 MB photo

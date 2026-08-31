@@ -213,6 +213,21 @@ body {
   color: #888;
 }
 
+/* -- footnotes and citations ----------------------------------------------- */
+
+/* Citations render as footnotes (see post-bibliography in src/post.typ), so
+   the reference list is redundant on screen. It stays in the markup —
+   visually hidden rather than display:none — because the footnotes link into
+   it and screen readers should still reach the full entries. */
+section[role="doc-bibliography"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* -- footnotes ------------------------------------------------------------- */
 
 /* Typst emits these; the numbering markup is its own. */

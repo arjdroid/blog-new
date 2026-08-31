@@ -53,6 +53,23 @@
     ))
 }
 
+// ── Bibliography ────────────────────────────────────────────────────────────
+//
+// A post's `bib` field (bytes of Hayagriva YAML, or a path to a .yml/.bib
+// file) puts its sources on the page. With the default "chicago-notes" style
+// each @citation renders as a footnote, sharing one numbering with the
+// ordinary footnotes, which is the whole point — so the reference list itself
+// is redundant and style.css hides it. It cannot simply be omitted: the
+// element has to exist for citations to resolve, and dropping it with
+// `show bibliography: none` fails with "failed to determine link anchor",
+// since the footnotes link into it.
+
+#let post-bibliography(p) = {
+  let data = p.at("bib", default: none)
+  if data == none { return }
+  bibliography(data, style: p.at("bib-style", default: "chicago-notes"), title: none)
+}
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 #let post-page(p, newer: none, older: none) = emit(
@@ -71,5 +88,6 @@
       #html.p(class: "post-meta")[#post-date(p) #post-tags(p)]
     ]
     #with-anchors(p.body)
+    #post-bibliography(p)
   ]
 ]
