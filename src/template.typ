@@ -23,8 +23,11 @@
 #let page-links(prefix) = {
   // `stylesheet` is a body-ok link type, so this is valid where it lands.
   html.link(rel: "stylesheet", href: url(prefix, "style.css"))
-  // These two are not body-ok, but Typst offers no way to reach the head and
-  // browsers honour them regardless.
+  // These two are not body-ok, and browsers do not look for them outside the
+  // <head>, which Typst gives no way to reach. They are kept as a best effort
+  // for tools that scan the whole document (many feed readers do). What
+  // actually puts the icon in the tab is /favicon.ico, which browsers request
+  // from the site root on their own — site.typ emits it.
   html.link(rel: "icon", href: url(prefix, "favicon.svg"))
   html.link(
     rel: "alternate",
@@ -109,10 +112,10 @@
 // Placeholder. Swap the `#` hrefs for the ring's real URLs (and the ring name
 // for its real name) once you have joined one.
 #let blogring() = html.div(class: "blogring")[
-  #html.span(class: "ring-name")[Some Webring]
-  #html.a(href: "#")[← prev]
-  #html.a(href: "#")[random]
-  #html.a(href: "#")[next →]
+  //#html.span(class: "ring-name")[gathering]
+  #html.a(href: "https://kytrinh.me/gathering/arjdroid.me/prev")[← prev]
+  #html.a(href: "https://kytrinh.me/gathering/")[gathering]
+  #html.a(href: "https://kytrinh.me/gathering/arjdroid.me/next")[next →]
 ]
 
 // ── Page ────────────────────────────────────────────────────────────────────

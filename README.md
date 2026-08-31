@@ -32,7 +32,8 @@ src/util.typ       site config, URL/date/text helpers
 content/posts.typ  the post manifest
 content/posts/     one file per post
 content/pages/     landing page and about page bodies
-assets/            style.css, favicon.svg → copied into dist/
+content/images/    images referenced by posts and pages
+assets/            style.css → copied into dist/ (favicon.svg is generated)
 ```
 
 ## Writing a post
@@ -160,6 +161,17 @@ then style it here.
 
 The webring strip above the copyright line is a placeholder: edit `blogring()`
 in `src/template.typ` to point at a real ring, or delete the call from `page()`.
+
+### Favicon
+
+The favicon is drawn by Typst, in `src/site.typ` — `$cal(A)$` on a white
+rounded square — and emitted twice: `favicon.svg`, and the same drawing
+rasterised to `favicon.ico`. The `.ico` is what actually appears in the tab:
+browsers only read `<link rel="icon">` from the `<head>`, which Typst 0.15
+cannot reach, but they always request `/favicon.ico` from the site root
+regardless. (Its bytes are PNG, which browsers accept for that request.) Note
+that this root-request fallback only works when the site is served from a
+domain root.
 
 ## Deploying
 

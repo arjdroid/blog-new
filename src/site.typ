@@ -48,6 +48,32 @@
   )
 }
 
+// ── Generated files ─────────────────────────────────────────────────────────
+
+// The favicon is a Typst document too: the math font's calligraphic A on a
+// white rounded square, so it needs no font at render time and no image editor
+// to change. Adjust the glyph, colours or radius here.
+#let favicon-art = {
+  set page(width: 32pt, height: 32pt, margin: 0pt, fill: none)
+  set text(fill: black, size: 22pt)
+  box(
+    width: 100%,
+    height: 100%,
+    fill: white,
+    radius: 6pt,
+    align(center + horizon)[$cal(A)$],
+  )
+}
+
+#document("favicon.svg", favicon-art)
+
+// Browsers only look for <link rel="icon"> in the <head>, which Typst 0.15
+// gives no way to reach (see src/template.typ). They do, however, always
+// request /favicon.ico from the site root on their own — so the same drawing
+// goes out as a raster under that name. The bytes are PNG, which every browser
+// accepts for this request.
+#document("favicon.ico", format: "png", favicon-art)
+
 // ── Assets ──────────────────────────────────────────────────────────────────
 
 // Images named by a post or page are copied from content/images/ into that
@@ -64,7 +90,6 @@
 }
 
 #asset("style.css", read("/assets/style.css", encoding: none))
-#asset("favicon.svg", read("/assets/favicon.svg", encoding: none))
 #asset("feed.xml", bytes(atom-feed(posts.all)))
 #asset("robots.txt", bytes(
   "User-agent: *\nAllow: /\nSitemap: " + site.base-url + "/feed.xml\n",
