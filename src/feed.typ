@@ -3,10 +3,11 @@
 // Entries carry titles, summaries and links rather than full bodies: post
 // bodies are Typst content, and content cannot be converted back to a string.
 
-#import "util.typ": site, post-url, rfc3339, xml-escape
+#import "util.typ": site, post-target, rfc3339, xml-escape
 
 #let entry(p) = {
-  let url = site.base-url + post-url(p)
+  // The feed is the one place that needs absolute URLs.
+  let url = site.base-url + "/" + post-target(p)
   "  <entry>\n"
   "    <title>" + xml-escape(p.title) + "</title>\n"
   "    <link href=\"" + url + "\"/>\n"

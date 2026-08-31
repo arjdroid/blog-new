@@ -1,17 +1,14 @@
-// The landing page. Takes the posts to feature so the page owns its own copy.
+// The landing page. `prefix` is the page's path back to the site root (empty
+// here, since the landing page *is* the root); `recent` is the posts to show.
 
-#import "/src/util.typ": site
+#import "/src/util.typ": site, url
 #import "/src/post.typ": post-card
 
-#let body(recent) = [
-  #html.section(class: "intro")[
-    #html.h1(site.title)
-    #html.p(class: "tagline", site.tagline)
-  ]
+#let body(prefix, recent) = [
+  #html.h1(site.title)
+  #html.p(class: "blurb", site.tagline)
 
-  #html.section(class: "recent")[
-    #html.h2("Recent posts")
-    #html.ul(class: "post-list", recent.map(post-card).join())
-    #html.p(html.a(href: "/posts/", class: "more")[All posts →])
-  ]
+  #html.h2("Recent posts")
+  #html.ul(class: "post-list", recent.map(p => post-card(prefix, p)).join())
+  #html.p(html.a(href: url(prefix, "posts/"), class: "more")[All posts →])
 ]

@@ -1,59 +1,50 @@
-// Entry point. Every file the site emits is declared here — pages as
-// `document`s, everything else as `asset`s.
+// Entry point. Every file the site emits is declared here — pages via `emit`
+// (which wraps `document` + the page template), everything else as `asset`s.
 //
 //   make build    → dist/
 //   make serve    → live-reloading preview on :3000
 
-#import "template.typ": page
-#import "post.typ": post-page, post-card
-#import "util.typ": site, post-path
+#import "template.typ": emit
+#import "post.typ": post-card, post-page
+#import "util.typ": post-path, site
 #import "feed.typ": atom-feed
 #import "/content/posts.typ" as posts
 #import "/content/pages/home.typ" as home
 #import "/content/pages/about.typ" as about
 
-// Syntax highlighting is baked into the markup as inline styles, so the theme
-// has to be chosen here, at build time. It pairs with the dark <pre> card in
-// style.css, which stays dark in both colour schemes for that reason.
-#set raw(theme: "/assets/code.tmTheme")
-
 #let recent = posts.all.slice(0, calc.min(5, posts.all.len()))
 
 // ── Pages ───────────────────────────────────────────────────────────────────
 
-#document(
+#emit(
   "index.html",
   title: site.title,
   description: site.tagline,
-  page(current: "home", home.body(recent)),
+  current: "home",
+  home.body("", recent),
 )
 
-#document(
+#emit(
   "posts/index.html",
   title: "Posts",
   description: "Everything published on " + site.title + ".",
-  page(title: "Posts", current: "posts")[
-    #html.h1("Posts")
-    #html.ul(class: "post-list", posts.all.map(post-card).join())
-  ],
-)
+  current: "posts",
+)[
+  #html.h1("Posts")
+  #html.ul(class: "post-list", posts.all.map(p => post-card("../", p)).join())
+]
 
-#document(
-  "about/index.html",
-  title: "About",
-  page(title: "About", current: "about")[
-    #html.h1("About")
-    #about.body
-  ],
-)
+#emit("about/index.html", title: "About", current: "about")[
+  #html.h1("About")
+  #about.body
+]
 
-#for p in posts.all {
-  document(
-    post-path(p),
-    title: p.title,
-    description: p.summary,
-    date: p.date,
-    post-page(p),
+// posts.all is newest first, so the previous entry is the newer post.
+#for (i, p) in posts.all.enumerate() {
+  post-page(
+    p,
+    newer: if i > 0 { posts.all.at(i - 1) },
+    older: if i + 1 < posts.all.len() { posts.all.at(i + 1) },
   )
 }
 

@@ -1,30 +1,19 @@
-/* The site's only styling surface.
-   Typst emits semantic markup with no classes of its own, so most rules are
-   element selectors; the handful of classes below are added by the templates
-   in src/. Typst injects its own <style> for MathML alignment — don't
-   duplicate that here. */
+/* A close reimplementation of Sphinx's Alabaster theme, using the values from
+   the deployed alabaster.css of leanprover-community.github.io/logic_and_proof.
+   Typst emits semantic markup with no classes of its own, so most rules here
+   are element selectors; the handful of classes come from src/template.typ and
+   src/post.typ. Typst injects its own <style> for MathML alignment — nothing
+   about that belongs here. */
 
-:root {
-  --measure: 34rem;
-  --bg: #fdfdfc;
-  --fg: #1b1b19;
-  --muted: #6b6b63;
-  --rule: #e2e2dc;
-  --accent: #9a3412;
-  --code-bg: #f2f2ee;
-  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
-}
+/* -- page layout ----------------------------------------------------------- */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14140f;
-    --fg: #e8e6df;
-    --muted: #9a978c;
-    --rule: #32312a;
-    --accent: #f0a988;
-    --code-bg: #1f1f19;
-  }
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 17px;
+  background-color: #fff;
+  color: #000;
+  margin: 0;
+  padding: 0;
 }
 
 *,
@@ -33,83 +22,168 @@
   box-sizing: border-box;
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
+.document {
+  width: 940px;
+  margin: 30px auto 0 auto;
 }
 
-body {
-  margin: 0;
-  padding: 0 1.5rem 4rem;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--serif);
-  font-size: 1.0625rem;
-  line-height: 1.65;
-  text-rendering: optimizeLegibility;
+.bodycontent {
+  color: #3e4349;
+  padding: 0 30px;
 }
 
-/* ── Layout ──────────────────────────────────────────────────────────────── */
-
-.site-header,
-main,
-.site-footer {
-  max-width: var(--measure);
-  margin-inline: auto;
+.sidebar {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 18px 10px;
 }
 
-.site-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  padding: 2.5rem 0 2rem;
+.footer {
+  width: 940px;
+  margin: 20px auto 30px auto;
+  font-size: 14px;
+  color: #888;
+  text-align: right;
 }
 
-.site-title {
-  font-weight: 600;
-  font-size: 1.0625rem;
-  letter-spacing: 0.01em;
-  color: var(--fg);
+.footer a {
+  color: #888;
+}
+
+@media screen and (min-width: 876px) {
+  .document {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  /* Content comes first in the markup, for narrow screens; on wide screens
+     the sidebar moves back to the left. */
+  .sidebar {
+    order: -1;
+    flex: 0 0 220px;
+    width: 220px;
+  }
+
+  .documentwrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+/* -- sidebar --------------------------------------------------------------- */
+
+.sidebar a {
+  color: #444;
   text-decoration: none;
+  border-bottom: 1px dotted #999;
 }
 
-.site-nav ul {
-  display: flex;
-  gap: 1.25rem;
-  margin: 0;
+.sidebar a:hover {
+  border-bottom: 1px solid #999;
+}
+
+.sidebar h1.logo {
+  font-size: 24px;
+  font-weight: normal;
+  margin: -10px 0 5px 0;
+}
+
+.sidebar h1.logo a {
+  border: none;
+}
+
+.sidebar h3 {
+  font-family: "Times New Roman", Times, serif;
+  color: #444;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 20px 0 5px 0;
   padding: 0;
+}
+
+.sidebar p {
+  color: #555;
+  margin: 10px 0;
+}
+
+.sidebar p.blurb {
+  margin-top: 0;
+  font-style: normal;
+}
+
+.sidebar ul {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+  color: #000;
+}
+
+.sidebar li {
+  margin-bottom: 2px;
+}
+
+.sidebar .current {
+  font-weight: bold;
+  color: #000;
+}
+
+.sidebar ul.toc .toc-l2 {
+  padding-left: 15px;
+  font-size: 0.95em;
+}
+
+.sidebar ul.toc .toc-l3 {
+  padding-left: 30px;
+  font-size: 0.9em;
+}
+
+.sidebar ul.recent li {
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+/* -- related bars ---------------------------------------------------------- */
+
+.related {
+  line-height: 30px;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.related.top {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.related.bottom {
+  border-top: 1px solid #eee;
+  margin-top: 30px;
+}
+
+.related ul {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
   list-style: none;
 }
 
-.site-nav a {
-  color: var(--muted);
-  text-decoration: none;
+.related li.older {
+  margin-left: auto;
+  text-align: right;
 }
 
-.site-nav a:hover,
-.site-nav a.active {
-  color: var(--fg);
-}
+/* -- body styles ----------------------------------------------------------- */
 
-.site-nav a.active {
+a {
+  color: #004b6b;
   text-decoration: underline;
-  text-underline-offset: 0.3em;
 }
 
-.site-footer {
-  margin-top: 4rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rule);
-  color: var(--muted);
-  font-size: 0.875rem;
+a:hover {
+  color: #6d4100;
 }
-
-.site-footer p {
-  margin: 0;
-}
-
-/* ── Typography ──────────────────────────────────────────────────────────── */
 
 h1,
 h2,
@@ -117,99 +191,112 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.25;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+  margin: 30px 0 10px 0;
+  padding: 0;
 }
 
-h1 {
-  margin: 0 0 0.5rem;
-  font-size: 1.875rem;
+.bodycontent h1 {
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 240%;
 }
 
-h2 {
-  margin: 2.5rem 0 0.75rem;
-  font-size: 1.3125rem;
+.bodycontent h2 {
+  font-size: 180%;
 }
 
-h3 {
-  margin: 2rem 0 0.5rem;
-  font-size: 1.125rem;
+.bodycontent h3 {
+  font-size: 150%;
+}
+
+.bodycontent h4 {
+  font-size: 130%;
+}
+
+.bodycontent h5,
+.bodycontent h6 {
+  font-size: 100%;
 }
 
 p,
-ul,
-ol,
-blockquote,
-figure,
-table {
-  margin: 0 0 1.15rem;
+dd,
+li {
+  line-height: 1.4em;
 }
 
-a {
-  color: var(--accent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.15em;
+a.headerlink {
+  color: #ddd;
+  padding: 0 4px;
+  text-decoration: none;
+  visibility: hidden;
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink {
+  visibility: visible;
+}
+
+a.headerlink:hover {
+  color: #444;
+  background: #eaeaea;
+}
+
+hr {
+  border: 1px solid #b1b4b6;
 }
 
 ul,
 ol {
-  padding-left: 1.25rem;
-}
-
-li {
-  margin-bottom: 0.35rem;
+  margin: 10px 0 10px 30px;
+  padding: 0;
 }
 
 blockquote {
-  margin-left: 0;
-  padding-left: 1.25rem;
-  border-left: 2px solid var(--rule);
-  color: var(--muted);
-  font-style: italic;
+  margin: 0 0 0 30px;
+  padding: 0;
+  color: #555;
 }
 
-hr {
-  height: 0;
-  margin: 2.5rem 0;
-  border: 0;
-  border-top: 1px solid var(--rule);
+dl {
+  margin: 0;
+  padding: 0;
 }
 
-/* ── Code, figures, tables, math ─────────────────────────────────────────── */
+dl dd {
+  margin-left: 30px;
+}
 
-code,
+/* -- code, figures, tables, math ------------------------------------------- */
+
 pre,
+code,
 kbd,
 samp {
-  font-family: var(--mono);
-  font-size: 0.875em;
+  font-family: Consolas, Menlo, "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-size: 0.9em;
+}
+
+pre {
+  background: #eee;
+  padding: 7px 30px;
+  margin: 15px 0;
+  overflow-x: auto;
+  line-height: 1.3em;
 }
 
 code {
-  padding: 0.15em 0.35em;
-  border-radius: 3px;
-  background: var(--code-bg);
-}
-
-/* Typst writes syntax colours as inline styles chosen at build time (see
-   assets/code.tmTheme), so the code card keeps the same dark background in
-   both colour schemes. */
-pre {
-  margin: 0 0 1.15rem;
-  padding: 1rem 1.15rem;
-  overflow-x: auto;
-  border-radius: 6px;
-  background: #1e1e1a;
-  color: #e6e4dc;
-  line-height: 1.5;
+  background-color: #fff;
+  color: #222;
 }
 
 pre code {
-  padding: 0;
   background: none;
-  color: inherit;
 }
 
 img,
@@ -220,107 +307,132 @@ video {
 }
 
 figure {
-  margin-inline: 0;
+  margin: 15px 0;
 }
 
 figcaption {
-  color: var(--muted);
-  font-size: 0.875rem;
+  color: #888;
+  font-size: 0.9em;
   text-align: center;
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
-  font-size: 0.9375rem;
+  border: 1px solid #888;
+  box-shadow: 2px 2px 4px #eee;
+  margin: 15px 0;
 }
 
 th,
 td {
-  padding: 0.4rem 0.6rem;
-  border-bottom: 1px solid var(--rule);
+  border: 1px solid #888;
+  padding: 0.25em 0.7em;
   text-align: left;
 }
 
-/* Block equations scroll rather than widen the page. */
+/* Wide equations scroll inside the column rather than widening the page. */
 math[display="block"] {
   display: block;
   overflow-x: auto;
-  margin: 1.5rem 0;
+  margin: 15px 0;
 }
 
-/* ── Home ────────────────────────────────────────────────────────────────── */
+/* -- post listings --------------------------------------------------------- */
 
-.intro {
-  margin-bottom: 3rem;
-}
-
-.intro .tagline {
-  color: var(--muted);
-  font-size: 1.125rem;
+ul.post-list {
   margin: 0;
-}
-
-.recent > h2:first-child {
-  margin-top: 0;
-}
-
-/* ── Post listings ───────────────────────────────────────────────────────── */
-
-.post-list {
   padding: 0;
   list-style: none;
 }
 
 .post-card {
-  margin-bottom: 2rem;
+  margin-bottom: 25px;
 }
 
-.post-card h2 {
-  margin: 0 0 0.15rem;
-  font-size: 1.125rem;
+.bodycontent .post-card h2 {
+  margin: 0 0 2px 0;
+  font-size: 130%;
 }
 
 .post-card h2 a {
-  color: var(--fg);
   text-decoration: none;
 }
 
 .post-card h2 a:hover {
-  color: var(--accent);
   text-decoration: underline;
+}
+
+.post-meta {
+  margin: 0 0 4px 0;
+  color: #888;
+  font-size: 0.85em;
+}
+
+.post-meta .tags {
+  margin-left: 8px;
 }
 
 .post-summary {
   margin: 0;
-  color: var(--muted);
 }
-
-.post-meta {
-  margin: 0 0 0.35rem;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  letter-spacing: 0.02em;
-}
-
-.post-meta .tags {
-  margin-left: 0.5rem;
-}
-
-.more {
-  font-size: 0.9375rem;
-}
-
-/* ── Post page ───────────────────────────────────────────────────────────── */
 
 .post-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 25px;
 }
 
-.post-header h1 + .post-meta {
+.post-header .post-meta {
   margin: 0;
 }
 
-.post > h2:first-of-type {
-  margin-top: 0;
+p.blurb {
+  color: #555;
+}
+
+/* -- narrow screens -------------------------------------------------------- */
+
+@media screen and (max-width: 875px) {
+  body {
+    margin: 0;
+    padding: 20px 30px;
+  }
+
+  .document {
+    width: 100%;
+    margin: 0;
+  }
+
+  .bodycontent {
+    padding: 0;
+  }
+
+  .sidebar {
+    margin: 50px -30px -20px -30px;
+    padding: 10px 20px;
+    background: #333;
+    color: #fff;
+  }
+
+  .sidebar h1.logo,
+  .sidebar h3,
+  .sidebar p,
+  .sidebar .current {
+    color: #fff;
+  }
+
+  .sidebar a {
+    color: #aaa;
+  }
+
+  .sidebar h1.logo a {
+    color: #fff;
+  }
+
+  .footer {
+    display: none;
+  }
+
+  ul,
+  ol {
+    margin-left: 20px;
+  }
 }

@@ -11,13 +11,19 @@ build:
 dev:
 	typst compile $(TYPST_FLAGS) --pretty src/site.typ dist
 
-# Rebuilds on change and serves with live reload on http://localhost:3000.
+# Typst's own HTTP server: rebuilds on change, live-reloads the browser, and
+# resolves /posts/foo/ to that directory's index.html. No other tooling needed.
 serve:
 	typst watch $(TYPST_FLAGS) --pretty src/site.typ dist --port 3000
 
+# Every link in the output must be relative, or the site breaks when served
+# from anywhere but a domain root.
 check: dev
-	@python3 -c "import xml.dom.minidom; xml.dom.minidom.parse('dist/feed.xml')" \
-		&& echo "feed.xml: ok"
+	@! grep -rn 'href="/[^/]\|src="/[^/]' dist --include='*.html' \
+		|| { echo "absolute URL in output — breaks subdirectory hosting"; exit 1; }
+	@echo "links: all relative"
+	@command -v xmllint >/dev/null 2>&1 \
+		&& xmllint --noout dist/feed.xml && echo "feed.xml: ok" || true
 	@find dist -type f | sort
 
 clean:
