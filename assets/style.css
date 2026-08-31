@@ -1,0 +1,326 @@
+/* The site's only styling surface.
+   Typst emits semantic markup with no classes of its own, so most rules are
+   element selectors; the handful of classes below are added by the templates
+   in src/. Typst injects its own <style> for MathML alignment — don't
+   duplicate that here. */
+
+:root {
+  --measure: 34rem;
+  --bg: #fdfdfc;
+  --fg: #1b1b19;
+  --muted: #6b6b63;
+  --rule: #e2e2dc;
+  --accent: #9a3412;
+  --code-bg: #f2f2ee;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14140f;
+    --fg: #e8e6df;
+    --muted: #9a978c;
+    --rule: #32312a;
+    --accent: #f0a988;
+    --code-bg: #1f1f19;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 1.5rem 4rem;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Layout ──────────────────────────────────────────────────────────────── */
+
+.site-header,
+main,
+.site-footer {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 2.5rem 0 2rem;
+}
+
+.site-title {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  letter-spacing: 0.01em;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.site-nav ul {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+  color: var(--fg);
+}
+
+.site-nav a.active {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.site-footer {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ── Typography ──────────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.25;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.875rem;
+}
+
+h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.3125rem;
+}
+
+h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+p,
+ul,
+ol,
+blockquote,
+figure,
+table {
+  margin: 0 0 1.15rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+ul,
+ol {
+  padding-left: 1.25rem;
+}
+
+li {
+  margin-bottom: 0.35rem;
+}
+
+blockquote {
+  margin-left: 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--rule);
+  color: var(--muted);
+  font-style: italic;
+}
+
+hr {
+  height: 0;
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
+/* ── Code, figures, tables, math ─────────────────────────────────────────── */
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--mono);
+  font-size: 0.875em;
+}
+
+code {
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  background: var(--code-bg);
+}
+
+/* Typst writes syntax colours as inline styles chosen at build time (see
+   assets/code.tmTheme), so the code card keeps the same dark background in
+   both colour schemes. */
+pre {
+  margin: 0 0 1.15rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: #1e1e1a;
+  color: #e6e4dc;
+  line-height: 1.5;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  color: inherit;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin-inline: 0;
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+th,
+td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+}
+
+/* Block equations scroll rather than widen the page. */
+math[display="block"] {
+  display: block;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+/* ── Home ────────────────────────────────────────────────────────────────── */
+
+.intro {
+  margin-bottom: 3rem;
+}
+
+.intro .tagline {
+  color: var(--muted);
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.recent > h2:first-child {
+  margin-top: 0;
+}
+
+/* ── Post listings ───────────────────────────────────────────────────────── */
+
+.post-list {
+  padding: 0;
+  list-style: none;
+}
+
+.post-card {
+  margin-bottom: 2rem;
+}
+
+.post-card h2 {
+  margin: 0 0 0.15rem;
+  font-size: 1.125rem;
+}
+
+.post-card h2 a {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.post-card h2 a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.post-summary {
+  margin: 0;
+  color: var(--muted);
+}
+
+.post-meta {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.post-meta .tags {
+  margin-left: 0.5rem;
+}
+
+.more {
+  font-size: 0.9375rem;
+}
+
+/* ── Post page ───────────────────────────────────────────────────────────── */
+
+.post-header {
+  margin-bottom: 2.5rem;
+}
+
+.post-header h1 + .post-meta {
+  margin: 0;
+}
+
+.post > h2:first-of-type {
+  margin-top: 0;
+}
