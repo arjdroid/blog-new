@@ -50,6 +50,19 @@
 
 // ── Assets ──────────────────────────────────────────────────────────────────
 
+// Images named by a post or page are copied from content/images/ into that
+// page's own output directory, so pages can refer to them by bare filename.
+#let copy-images(dir, names) = {
+  for name in names {
+    asset(dir + name, read("/content/images/" + name, encoding: none))
+  }
+}
+
+#copy-images("about/", about.images)
+#for p in posts.all {
+  copy-images("posts/" + p.slug + "/", p.at("images", default: ()))
+}
+
 #asset("style.css", read("/assets/style.css", encoding: none))
 #asset("favicon.svg", read("/assets/favicon.svg", encoding: none))
 #asset("feed.xml", bytes(atom-feed(posts.all)))

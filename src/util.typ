@@ -33,6 +33,19 @@
   (id: "about", label: "About", target: "about/"),
 )
 
+// ── Images ──────────────────────────────────────────────────────────────────
+//
+// Typst's own `#image()` inlines the file as a base64 data URI, which turns a
+// 4 MB photo into a 5.4 MB HTML page that no browser can cache. Instead, put
+// the file in content/images/, list its name in the post's or page's `images`
+// field, and reference it with `img()`. site.typ copies it next to the page
+// that uses it, so the `src` is a bare filename and needs no `../` prefix.
+
+#let img(file, alt: "", caption: none) = {
+  let el = html.img(src: file, alt: alt)
+  if caption == none { el } else { html.figure[#el #html.figcaption(caption)] }
+}
+
 // ── Dates ───────────────────────────────────────────────────────────────────
 
 #let fmt-date(d) = d.display("[month repr:long] [day padding:none], [year]")

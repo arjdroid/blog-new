@@ -46,23 +46,38 @@ Create `content/posts/YYYY-MM-DD-slug.typ`:
   date: datetime(year: 2026, month: 9, day: 20),
   tags: ("typst",),
   summary: "One sentence, reused as the meta description and feed summary.",
+  images: ("photo.jpg",),   // optional; see below
   body: [
     Ordinary Typst markup. `=` starts a section (exported as <h2>; <h1> is the
-    post title). Equations become MathML, code blocks are highlighted.
+    post title). Equations become MathML, code blocks are highlighted,
+    footnotes#footnote[Like this one.] become an endnote list with backlinks.
   ],
 )
 ```
 
-Then register it in `content/posts.typ` — an `#import` line and an entry in the
-array. Typst cannot list a directory, so this is the one manual step; ordering
-is handled automatically (newest first), as are the sidebar contents, the
-previous/next links, and the feed.
+Then register it in `content/posts.typ` — an `#import` line and the module name
+in the list. Typst cannot list a directory, so this is the one manual step;
+ordering is handled automatically (newest first), as are the sidebar contents,
+the previous/next links, and the feed.
 
 Post `title` and `summary` are plain strings, not content, because the Atom feed
 reuses them and Typst content cannot be converted back to a string.
 
 Section headings automatically get an `id` and a `¶` permalink anchor, and the
 sidebar table of contents is derived from the same headings.
+
+### Images
+
+Typst's own `#image()` inlines the file as a base64 data URI — a 4 MB photo
+becomes a 5.4 MB HTML page that no browser can cache. Use `img()` instead:
+
+1. put the file in `content/images/`,
+2. list its filename in the post's (or page's) `images` field,
+3. reference it with `#img("photo.jpg", alt: "…", caption: [optional])`.
+
+`src/site.typ` copies each listed file into that page's own output directory, so
+the `src` is a bare filename and needs no `../` prefix. `#image()` still works
+and is fine for something tiny, but everything real should go through `img()`.
 
 ## URLs are relative, always
 
@@ -82,22 +97,35 @@ URLs. Set it before publishing.
 
 ## Styling
 
-Typst emits semantic HTML and no CSS at all. `src/template.typ` builds the
-`<html>`, `<head>` and `<body>` elements itself — which makes Typst skip its own
-skeleton — and links `style.css` from the head. Typst still injects its MathML
-stylesheet into that head, so equations align correctly.
+Typst emits semantic HTML and no CSS at all, and it generates the
+`<html>`/`<head>`/`<body>` skeleton itself. Building that skeleton by hand is
+the documented way to control the head, but Typst 0.15 rejects footnotes in
+that mode, so `src/template.typ` lets Typst own it: the head gets the charset,
+viewport, `<title>` and the metadata passed to `document`, and `style.css` is
+linked from the top of the body instead (`stylesheet` is a
+[body-ok](https://html.spec.whatwg.org/multipage/links.html) link type, so this
+is valid). The `icon` and `alternate` links are not body-ok; Typst offers no way
+to reach the head, and browsers honour them anyway.
+
+Typst appends footnotes as a `<section role="doc-endnotes">` at the very end of
+the body — after the sidebar and footer. `<body>` is therefore the layout
+container, and the stylesheet moves that section back under the article: grid
+placement on wide screens, flex `order` on narrow ones.
 
 `assets/style.css` is a reimplementation of Sphinx's
 [Alabaster](https://github.com/sphinx-doc/alabaster) theme: a 940px column with
-a 220px sidebar on the left, Times New Roman at 17px, and a collapse below
-875px that moves the sidebar under the content on a dark background. The layout
-uses flexbox rather than Alabaster's float trick, and nothing depends on
-Sphinx's `basic.css`.
+a 220px sidebar on the left and Times New Roman at 17px. Below 875px the
+sidebar moves under the article, keeping the page's normal colours, and both it
+and the footer are pinned to the bottom of the viewport on short pages. Nothing
+depends on Sphinx's `basic.css`.
 
 Most rules are element selectors, since Typst's markup carries no classes of its
 own; the classes that do appear (`sidebar`, `related`, `post-card`, `headerlink`,
 …) come from `src/template.typ` and `src/post.typ`. Add the class there first,
 then style it here.
+
+The webring strip above the copyright line is a placeholder: edit `blogring()`
+in `src/template.typ` to point at a real ring, or delete the call from `page()`.
 
 ## Deploying
 

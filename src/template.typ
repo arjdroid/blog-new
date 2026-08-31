@@ -2,9 +2,14 @@
 // a 940px column with a 220px sidebar on the left, collapsing below the
 // content on narrow screens.
 //
-// Because we build <html>, <head> and <body> ourselves, Typst omits its own
-// skeleton — that is what lets us link the stylesheet and set per-page meta
-// tags. Typst still injects its MathML stylesheet into our <head>.
+// Typst generates <html>, <head> and <body> itself here. We used to build them
+// by hand — which is the documented way to control the head — but Typst 0.15
+// rejects footnotes in that mode ("footnotes are not currently supported in
+// combination with a custom `<html>` or `<body>` element"), and footnotes are
+// worth more than head control. In exchange Typst fills the head with the
+// charset, viewport, <title> and the metadata passed to `document`, and it
+// appends footnotes as a <section role="doc-endnotes"> at the very end of the
+// body — after our footer. The layout in style.css reorders it back into place.
 
 #import "util.typ": (
   fmt-date, nav-links, post-target, prefix-for, site, url,
@@ -12,6 +17,22 @@
 #import "/content/posts.typ" as posts
 
 #let recent-posts = posts.all.slice(0, calc.min(5, posts.all.len()))
+
+// ── Head-ish elements ───────────────────────────────────────────────────────
+
+#let page-links(prefix) = {
+  // `stylesheet` is a body-ok link type, so this is valid where it lands.
+  html.link(rel: "stylesheet", href: url(prefix, "style.css"))
+  // These two are not body-ok, but Typst offers no way to reach the head and
+  // browsers honour them regardless.
+  html.link(rel: "icon", href: url(prefix, "favicon.svg"))
+  html.link(
+    rel: "alternate",
+    type: "application/atom+xml",
+    title: site.title + " feed",
+    href: url(prefix, "feed.xml"),
+  )
+}
 
 // ── Sidebar ─────────────────────────────────────────────────────────────────
 
@@ -83,61 +104,54 @@
   ]
 }
 
+// ── Blogring ────────────────────────────────────────────────────────────────
+
+// Placeholder. Swap the `#` hrefs for the ring's real URLs (and the ring name
+// for its real name) once you have joined one.
+#let blogring() = html.div(class: "blogring")[
+  #html.span(class: "ring-name")[Some Webring]
+  #html.a(href: "#")[← prev]
+  #html.a(href: "#")[random]
+  #html.a(href: "#")[next →]
+]
+
 // ── Page ────────────────────────────────────────────────────────────────────
 
 #let page(
   prefix: "",
-  title: none,
-  description: none,
   current: none,
   current-slug: none,
   toc: none,
   related: none,
   body,
-) = html.html(lang: "en")[
-  #html.head[
-    #html.meta(charset: "utf-8")
-    #html.meta(name: "viewport", content: "width=device-width, initial-scale=1")
-    #html.title(if title == none { site.title } else { title + " · " + site.title })
-    #if description != none {
-      html.meta(name: "description", content: description)
-    }
-    #html.meta(name: "author", content: site.author)
-    #html.link(rel: "stylesheet", href: url(prefix, "style.css"))
-    #html.link(rel: "icon", href: url(prefix, "favicon.svg"))
-    #html.link(
-      rel: "alternate",
-      type: "application/atom+xml",
-      title: site.title + " feed",
-      href: url(prefix, "feed.xml"),
-    )
-  ]
-  #html.body[
-    // The content comes first in the markup so that narrow screens stack the
-    // sidebar below the article; `order` puts it back on the left when wide.
-    #html.div(class: "document")[
-      #html.div(class: "documentwrapper")[
-        #html.div(class: "bodycontent")[
-          #related-bar(prefix, related, "top")
-          #html.main(body)
-          #related-bar(prefix, related, "bottom")
-        ]
-      ]
-      #html.div(class: "sidebar")[
-        #html.h1(class: "logo", html.a(href: url(prefix, ""), site.title))
-        #html.p(class: "blurb", site.tagline)
-        #sidebar-nav(prefix, current)
-        #sidebar-toc(toc)
-        #sidebar-recent(prefix, current-slug)
-      ]
+) = {
+  page-links(prefix)
+
+  html.div(class: "documentwrapper")[
+    #html.div(class: "bodycontent")[
+      #related-bar(prefix, related, "top")
+      #html.main(body)
+      #related-bar(prefix, related, "bottom")
     ]
+  ]
+
+  html.div(class: "sidebar")[
+    #html.h1(class: "logo", html.a(href: url(prefix, ""), site.title))
+    #html.p(class: "blurb", site.tagline)
+    #sidebar-nav(prefix, current)
+    #sidebar-toc(toc)
+    #sidebar-recent(prefix, current-slug)
+  ]
+
+  html.div(class: "pagefooter")[
+    #blogring()
     #html.div(class: "footer")[
       © #site.since #site.author ·
       #html.a(href: url(prefix, "feed.xml"))[Feed] ·
       built with #html.a(href: "https://typst.app")[Typst]
     ]
   ]
-]
+}
 
 // Emits one file of the bundle. The `../` prefix is derived from `path` here
 // so the two can never drift apart.
@@ -153,13 +167,12 @@
   body,
 ) = document(
   path,
-  title: title,
+  title: if title == none { site.title } else { title + " · " + site.title },
   description: description,
+  author: site.author,
   date: date,
   page(
     prefix: prefix-for(path),
-    title: title,
-    description: description,
     current: current,
     current-slug: current-slug,
     toc: toc,
