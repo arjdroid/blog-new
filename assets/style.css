@@ -55,11 +55,22 @@ body {
   color: #888;
 }
 
-/* Wide: 940px overall — a 220px sidebar beside a 720px column. */
-@media screen and (min-width: 876px) {
+/* Wide: the sidebar sits in the left margin, and an empty column of the same
+   width mirrors it on the right, so the text column is centred in the window
+   and both margins match. Every track is fluid (`minmax(0, …)` caps rather
+   than fixes the content width), so the layout narrows with the window
+   instead of overflowing it, and switches to the stacked layout the moment
+   the text column would get too tight. That threshold is the one number to
+   tune: at 900px the text column is 460px wide. */
+@media screen and (min-width: 900px) {
   body {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 220px 720px minmax(0, 1fr);
+    grid-template-columns:
+      minmax(0, 1fr)      /* left gutter */
+      220px               /* sidebar */
+      minmax(0, 720px)    /* text column */
+      220px               /* right margin, mirroring the sidebar */
+      minmax(0, 1fr);     /* right gutter */
     grid-template-rows: auto auto 1fr;
     padding-top: 30px;
   }
@@ -246,6 +257,26 @@ section[role="doc-endnotes"] ol {
 
 section[role="doc-endnotes"] li {
   margin-bottom: 8px;
+}
+
+/* A default <sup> is `vertical-align: super`, which grows the line box and
+   makes any line holding a footnote marker taller than its neighbours. Taking
+   the marker out of the line's height calculation (line-height: 0) and
+   offsetting it with `position: relative` instead keeps the leading even. */
+sup,
+sub {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
 }
 
 sup[role="doc-noteref"] a,
@@ -477,7 +508,7 @@ p.blurb {
 /* No room for the sidebar beside the text, so it moves below the article —
    same colours as the rest of the page — and it and the footer are pushed to
    the bottom of the viewport when the content is short. */
-@media screen and (max-width: 875px) {
+@media screen and (max-width: 899px) {
   body {
     display: flex;
     flex-direction: column;

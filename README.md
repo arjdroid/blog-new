@@ -148,8 +148,11 @@ container, and the stylesheet moves that section back under the article: grid
 placement on wide screens, flex `order` on narrow ones.
 
 `assets/style.css` is a reimplementation of Sphinx's
-[Alabaster](https://github.com/sphinx-doc/alabaster) theme: a 940px column with
-a 220px sidebar on the left and Times New Roman at 17px. Below 875px the
+[Alabaster](https://github.com/sphinx-doc/alabaster) theme: a text column of up
+to 720px with a 220px sidebar in the left margin, an empty margin of the same
+width mirroring it on the right, and Times New Roman at 17px. Every track is
+fluid, so the column narrows with the window rather than overflowing it. Below
+900px — where the text column would be under ~460px — the
 sidebar moves under the article, keeping the page's normal colours, and both it
 and the footer are pinned to the bottom of the viewport on short pages. Nothing
 depends on Sphinx's `basic.css`.
