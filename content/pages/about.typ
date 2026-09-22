@@ -11,19 +11,19 @@
 
   I am currently an undergraduate studying Computer Science and Philosophy at the University of California, San Diego.
 
-  `Currently an undergraduate studying Computer Science and Philosophy at the University of California`
+  //`Currently an undergraduate studying Computer Science and Philosophy at the University of California`
 
-  ```txt
+/*  ```txt
   Currently an undergraduate studying Computer Science and Philosophy at the University of California
 
   Currently an undergraduate studying Computer Science and Philosophy at UCSD
   ```
+*/
+  I have a lot of interests, and I try to enjoy a lot of the good things life has to offer -- like coffee, and pleasant company.
 
-  I have a lot of interests, and I try to enjoy a lot of the good things life has to offer.
+  I am optimistic about humans and technology; I think we can do great feats for great good, and that it is a worthwhile, albeit not easy pursuit.
 
-  I am optimistic about humans and technology – I think we can do great feats for great good, and that it is a worthwhile pursuit, albeit not easy.
-
-  I write things here occasionally.
+  I write things here occasionally. I also like taking photos! Here's one of something you might recognise if you've made a visit to the Bay Bridge in San Francisco:
 
   #img("DSC06483-bnw-dutch-bow.jpg", alt: "Black and white photograph")
 
@@ -39,4 +39,5 @@
   = Fun Projects
 
   #link("https://typcraft.nxtdroid.win")[typcraft]
+
 ]

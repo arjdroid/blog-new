@@ -57,20 +57,24 @@ body {
 
 /* Wide: the sidebar sits in the left margin, and an empty column of the same
    width mirrors it on the right, so the text column is centred in the window
-   and both margins match. Every track is fluid (`minmax(0, …)` caps rather
-   than fixes the content width), so the layout narrows with the window
-   instead of overflowing it, and switches to the stacked layout the moment
-   the text column would get too tight. That threshold is the one number to
-   tune: at 900px the text column is 460px wide. */
-@media screen and (min-width: 900px) {
+   and both margins match. The track is 100ch plus the 60px of horizontal
+   padding that .bodycontent/doc-endnotes subtract back out, so the actual
+   line length is 100ch in both this layout and the narrow one below — it
+   does not compress. The gutters and right margin are the fluid tracks
+   (`minmax(0, …)`), so squeezing the window eats the decorative margins
+   first and switches to the stacked layout the moment there is no margin
+   left to give. That threshold is the one number to tune: sidebar (220px) +
+   text (100ch + 60px, ~910px in Times New Roman at the base 17px) ≈ 1130px,
+   the width at which both margins have hit zero. */
+@media screen and (min-width: 1130px) {
   body {
     display: grid;
     grid-template-columns:
-      minmax(0, 1fr)      /* left gutter */
-      220px               /* sidebar */
-      minmax(0, 720px)    /* text column */
-      220px               /* right margin, mirroring the sidebar */
-      minmax(0, 1fr);     /* right gutter */
+      minmax(0, 1fr)          /* left gutter */
+      220px                   /* sidebar */
+      calc(100ch + 60px)      /* text column, fixed */
+      minmax(0, 220px)        /* right margin, mirroring the sidebar */
+      minmax(0, 1fr);         /* right gutter */
     grid-template-rows: auto auto 1fr;
     padding-top: 30px;
   }
@@ -513,8 +517,11 @@ p.blurb {
 
 /* No room for the sidebar beside the text, so it moves below the article —
    same colours as the rest of the page — and it and the footer are pushed to
-   the bottom of the viewport when the content is short. */
-@media screen and (max-width: 899px) {
+   the bottom of the viewport when the content is short. The article and
+   endnotes keep the same 100ch cap as the wide layout's text column and
+   centre themselves, so crossing the 1130px breakpoint never changes the
+   line width — it only changes whether the sidebar sits beside or below. */
+@media screen and (max-width: 1129px) {
   body {
     display: flex;
     flex-direction: column;
@@ -523,6 +530,14 @@ p.blurb {
 
   .bodycontent {
     padding: 0;
+  }
+
+  .documentwrapper,
+  section[role="doc-endnotes"] {
+    width: 100%;
+    max-width: 100ch;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   section[role="doc-endnotes"] {

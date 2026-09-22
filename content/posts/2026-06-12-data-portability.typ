@@ -97,11 +97,16 @@
     note: RIN 0938-AQ38. Codified at 42 {C.F.R.} pt.\\  493 and 45 {C.F.R.} pt.\\  164. Effective April 7, 2014
 ")
 
-#set document(
-  title: [The Right to Data Portability in Health Trackers],
-)
-Arjun Singh, University of California, San Diego
-\ PHIL 174 Data Ethics Spring 2026, Professor Brandt
+#let post = (
+  slug: "data-portability",
+  bib: bib-data,
+  title: "The Right to Data Portability in Health Trackers",
+  date: datetime(year: 2026, month: 6, day: 12),
+  tags: ("tech", "privacy"),
+  summary: "Pretty obvious if you think about it.",
+  body: [
+//Arjun Singh, University of California, San Diego
+#quote(block:true)[I turned this in (mostly similarly) for PHIL 174: Data Ethics in Spring 2026.]
 
 = Introduction
 Digital devices are becoming more ubiquitous in modern life, and one of their applications is in tracking the health of their users. Such health trackers range from commercial 'smart' watches to medically certified continuous blood glucose monitoring devices. There lies cause for concern with many of these devices if there is no non-intrusive, simple, and easy method of exporting the metrics collected in a shareable, standardised format for users to be able to freely use this information in accordance with their will. In response to this concern, this article argues for a right to data portability, at least in the context of health trackers. First, I will elaborate on what I mean by data portability in this context. Then, I will qualify what kinds of data should be covered under this right, why manufacturers of health tracking devices might object to it, and how there is a morally weighty interest that would be protected by data portability. Finally, I will evaluate whether other measures could achieve similar ethical outcomes.
@@ -158,5 +163,5 @@ There might not be many direct costs to users with a right to data portability. 
 = Conclusion
 
 Currently, it is unclear to what extent restrictions on data portability are in place in industry. Nonetheless, the possibility for adverse moral outcomes without data portability in the healthcare context seems to warrant pre-emptive provisions for such a right.
-
-#bibliography(title: "References", "PHIL 174.bib", style: "chicago-notes", full: true)
+]
+)

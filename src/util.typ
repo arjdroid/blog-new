@@ -31,6 +31,7 @@
   (id: "home", label: "Home", target: ""),
   (id: "posts", label: "Posts", target: "posts/"),
   (id: "about", label: "About", target: "about/"),
+  (id: "contact", label: "Contact", target: "contact/"),
 )
 
 // ── Images ──────────────────────────────────────────────────────────────────

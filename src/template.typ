@@ -1,7 +1,3 @@
-// The site-wide page shell, in the shape of Sphinx's Alabaster theme:
-// a 940px column with a 220px sidebar on the left, collapsing below the
-// content on narrow screens.
-//
 // Typst generates <html>, <head> and <body> itself here. We used to build them
 // by hand — which is the documented way to control the head — but Typst 0.15
 // rejects footnotes in that mode ("footnotes are not currently supported in
