@@ -116,9 +116,9 @@
 // for its real name) once you have joined one.
 #let blogring() = html.div(class: "blogring")[
   //#html.span(class: "ring-name")[gathering]
-  #html.a(href: "https://kytrinh.me/gathering/arjdroid.me/prev")[← prev]
+  #html.a(href: "https://kytrinh.me/gathering/arjunsblog/prev")[← prev]
   #html.a(href: "https://kytrinh.me/gathering/")[gathering]
-  #html.a(href: "https://kytrinh.me/gathering/arjdroid.me/next")[next →]
+  #html.a(href: "https://kytrinh.me/gathering/arjunsblog/next")[next →]
 ]
 
 // ── Page ────────────────────────────────────────────────────────────────────
