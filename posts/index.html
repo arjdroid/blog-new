@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Posts · Arjun's Blog</title><meta name="description" content="Everything published on Arjun's Blog."><meta name="authors" content="Arjun Singh"><style>/* Alignment */
+mtable.right-align mtd,
+mtable mtd.right-align,
+mtable.left-align mtd.right-align,
+mtable.aligned mtd:nth-child(odd) {
+  justify-items: end;
+  text-align: right;
+}
+mtable.cases mtd,
+mtable.left-align mtd,
+mtable mtd.left-align,
+mtable.aligned mtd:nth-child(even),
+math:is(:not([display])) > mtable.multiline-equation mtd {
+  justify-items: start;
+  text-align: left;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.left-flush {
+  padding-left: 0;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.right-flush {
+  padding-right: 0;
+}
+
+/* Tables */
+mtable {
+  math-style: inherit;
+}
+mtd {
+  math-depth: auto-add;
+  math-style: compact;
+  math-shift: compact;
+}
+
+/* Equations */
+mtable.multiline-equation mtd {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+  padding: 0;
+}
+math > mtable.multiline-equation mtr:not(:last-child) mtd {
+  padding-bottom: 0.5em;
+}
+
+/* Fractions */
+mfrac {
+  padding-inline: 0;
+  margin-inline: 0.1em;
+}
+
+/* Accents */
+mover[accent="true" i] > :first-child {
+  font-feature-settings: "dtls";
+}
+mover.dotted[accent="true" i] > :first-child {
+  font-feature-settings: "dtls" 0;
+}
+
+/* Other rules for scriptlevel, displaystyle and math-shift */
+munder > :nth-child(2),
+munderover > :nth-child(2) {
+  math-shift: compact
+}
+munder[accentunder="true" i] > :not(:first-child),
+mover[accent="true" i] > :not(:first-child) {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+}</style></head><body><link rel="stylesheet" href="../style.css"><link rel="icon" href="../favicon.svg"><link rel="alternate" type="application/atom+xml" title="Arjun's Blog feed" href="../feed.xml"><div class="documentwrapper"><div class="bodycontent"><main><h1>Posts</h1><ul class="post-list"><li class="post-card"><h2><a href="../posts/data-portability/">The Right to Data Portability in Health Trackers</a></h2><p class="post-meta"><time datetime="2026-06-12">June 12, 2026</time> <span class="tags">#tech #privacy</span></p><p class="post-summary">Pretty obvious if you think about it.</p></li><li class="post-card"><h2><a href="../posts/satan-apple/">Just Say No? (to Satan's Apple)</a></h2><p class="post-meta"><time datetime="2026-03-21">March 21, 2026</time> <span class="tags">#philosophy #decision theory</span></p><p class="post-summary">Infinite decision theory is weird.</p></li><li class="post-card"><h2><a href="../posts/greedy-tragedy/">Greedy Algorithms and Diachronic Tragedy</a></h2><p class="post-meta"><time datetime="2026-02-12">February 12, 2026</time> <span class="tags">#programming #philosophy</span></p><p class="post-summary">My daemons might not be irrational after all!</p></li></ul></main></div></div><div class="sidebar"><h1 class="logo"><a href="../">Arjun's Blog</a></h1><p class="blurb">Miscellaneous Musings</p><h3>Navigation</h3><ul><li><a href="../">Home</a></li><li><a href="../posts/" class="current">Posts</a></li><li><a href="../about/">About</a></li><li><a href="../contact/">Contact</a></li></ul><h3>Recent posts</h3><ul class="recent"><li><a href="../posts/data-portability/">The Right to Data Portability in Health Trackers</a></li><li><a href="../posts/satan-apple/">Just Say No? (to Satan's Apple)</a></li><li><a href="../posts/greedy-tragedy/">Greedy Algorithms and Diachronic Tragedy</a></li></ul></div><div class="pagefooter"><div class="blogring"><a href="https://kytrinh.me/gathering/arjdroid.me/prev">← prev</a> <a href="https://kytrinh.me/gathering/">gathering</a> <a href="https://kytrinh.me/gathering/arjdroid.me/next">next →</a></div><div class="footer">© 2026 Arjun Singh · <a href="../feed.xml">Feed</a> · built with <a href="https://typst.app">Typst</a></div></div></body></html>

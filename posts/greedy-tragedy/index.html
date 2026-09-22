@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Greedy Algorithms and Diachronic Tragedy · Arjun's Blog</title><meta name="description" content="My daemons might not be irrational after all!"><meta name="authors" content="Arjun Singh"><style>/* Alignment */
+mtable.right-align mtd,
+mtable mtd.right-align,
+mtable.left-align mtd.right-align,
+mtable.aligned mtd:nth-child(odd) {
+  justify-items: end;
+  text-align: right;
+}
+mtable.cases mtd,
+mtable.left-align mtd,
+mtable mtd.left-align,
+mtable.aligned mtd:nth-child(even),
+math:is(:not([display])) > mtable.multiline-equation mtd {
+  justify-items: start;
+  text-align: left;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.left-flush {
+  padding-left: 0;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.right-flush {
+  padding-right: 0;
+}
+
+/* Tables */
+mtable {
+  math-style: inherit;
+}
+mtd {
+  math-depth: auto-add;
+  math-style: compact;
+  math-shift: compact;
+}
+
+/* Equations */
+mtable.multiline-equation mtd {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+  padding: 0;
+}
+math > mtable.multiline-equation mtr:not(:last-child) mtd {
+  padding-bottom: 0.5em;
+}
+
+/* Fractions */
+mfrac {
+  padding-inline: 0;
+  margin-inline: 0.1em;
+}
+
+/* Accents */
+mover[accent="true" i] > :first-child {
+  font-feature-settings: "dtls";
+}
+mover.dotted[accent="true" i] > :first-child {
+  font-feature-settings: "dtls" 0;
+}
+
+/* Other rules for scriptlevel, displaystyle and math-shift */
+munder > :nth-child(2),
+munderover > :nth-child(2) {
+  math-shift: compact
+}
+munder[accentunder="true" i] > :not(:first-child),
+mover[accent="true" i] > :not(:first-child) {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+}</style></head><body><link rel="stylesheet" href="../../style.css"><link rel="icon" href="../../favicon.svg"><link rel="alternate" type="application/atom+xml" title="Arjun's Blog feed" href="../../feed.xml"><div class="documentwrapper"><div class="bodycontent"><div class="related top"><ul><li class="newer"><a href="../../posts/satan-apple/">← Just Say No? (to Satan's Apple)</a></li></ul></div><main><article class="post"><header class="post-header"><h1>Greedy Algorithms and Diachronic Tragedy</h1><p class="post-meta"><time datetime="2026-02-12">February 12, 2026</time> <span class="tags">#programming #philosophy</span></p></header><p><img src="procrastination.jpg" alt="Procrastination"></p><p>This is going to be a short one but I figure I still want to push <em>something</em> into the aether every month; it’s good practice for getting more comfortable writing publicly and without excessive indecision.</p><p>Right now, in my algorithms class, we just finished covering greedy algorithms, and one quote from lecture that stuck with me was something along the lines of, “Just like in real life, choosing the best option in the moment may not be the optimal strategy for the long-term”.</p><p>At the same time, in one of my philosophy courses we’re reading about what Brian Hedden dubs ‘The Diachronic Tragedy’ - the undesirable outcome that occurs when one’s preferences lead them to make choices desirable in individual instances (synchronically), but are undesirable in the bigger picture through time (diachronically). The over-arching example goes something like this:</p><p>Suppose you have two choices: up, and down, at two times: t1, and t2. At individual instances t1 and t2 you always prefer going up to going down, no matter what you decide(d) to do before / after. However, overall, you would actually prefer down, down over up, up (for a wide variety of reasons that can be applicable across different cases, this is just a simplification of the idea). So, your making desirable choices at individual instances lead to an undesirable sequence of choices across those instances combined.<sup id="loc-1" role="doc-noteref"><a href="#loc-3">18</a></sup></p><p>Hedden argues that holding beliefs that lead to a diachronic tragedy are not irrational inherently due to that property. I find this interesting in the case of greedy algorithms because in our problems we have clearly defined objectives that our solution should be optimal for. Thus, we can make exchange arguments or present counter-examples as to why a greedy solution (which may involve a set of actions that would be considered as leading to diachronic tragedy) is or isn’t optimal.</p><p>I think a lot of my own actions may be considered preferrable in the moment, but undesirable across time, according to my own beliefs. From the perspective of my algorithms class, they would be considered similar to a non-optimal greedy strategy. However, from the philosophical question of rationality, it is up for debate? I don’t know, but I do have a lot homework due so that’s all for now.</p><section role="doc-bibliography" class="hanging-indent"><ul style="list-style-type: none"><li id="loc-2">Hedden, Brian. “Options and Diachronic Tragedy.” <em>Philosophy and Phenomenological Research</em> 90, no. 2 (2015): 423–51. <a href="https://doi.org/10.1111/phpr.12048">https://doi.org/10.1111/phpr.12048</a>.</li></ul></section></article></main><div class="related bottom"><ul><li class="newer"><a href="../../posts/satan-apple/">← Just Say No? (to Satan's Apple)</a></li></ul></div></div></div><div class="sidebar"><h1 class="logo"><a href="../../">Arjun's Blog</a></h1><p class="blurb">Miscellaneous Musings</p><h3>Navigation</h3><ul><li><a href="../../">Home</a></li><li><a href="../../posts/" class="current">Posts</a></li><li><a href="../../about/">About</a></li><li><a href="../../contact/">Contact</a></li></ul><h3>Recent posts</h3><ul class="recent"><li><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers</a></li><li><a href="../../posts/satan-apple/">Just Say No? (to Satan's Apple)</a></li><li><span class="current">Greedy Algorithms and Diachronic Tragedy</span></li></ul></div><div class="pagefooter"><div class="blogring"><a href="https://kytrinh.me/gathering/arjdroid.me/prev">← prev</a> <a href="https://kytrinh.me/gathering/">gathering</a> <a href="https://kytrinh.me/gathering/arjdroid.me/next">next →</a></div><div class="footer">© 2026 Arjun Singh · <a href="../../feed.xml">Feed</a> · built with <a href="https://typst.app">Typst</a></div></div><section role="doc-endnotes"><ol style="list-style-type: none"><li id="loc-3"><sup role="doc-backlink"><a href="#loc-1">18</a></sup><a href="#loc-2">Brian Hedden, “Options and Diachronic Tragedy,” <em>Philosophy and Phenomenological Research</em> 90, no. 2 (2015): p. 429, <a href="https://doi.org/10.1111/phpr.12048">https://doi.org/10.1111/phpr.12048</a></a>.</li></ol></section></body></html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Deploying my blog with typst · Arjun's Blog</title>
+    <meta name="description" content="What can I say? I like typst.">
+    <meta name="authors" content="Arjun Singh">
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="icon" href="../../favicon.svg">
+    <link rel="alternate" type="application/atom+xml" title="Arjun's Blog feed" href="../../feed.xml">
+    <div class="documentwrapper">
+      <div class="bodycontent">
+        <div class="related top">
+          <ul>
+            <li class="newer"><a href="../../posts/proving-automata/">← Fun(ctions) with Automata in Lean</a></li>
+            <li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li>
+          </ul>
+        </div>
+        <main>
+          <article class="post">
+            <header class="post-header">
+              <h1>Deploying my blog with typst</h1>
+              <p class="post-meta"><time datetime="2026-09-02">September 2, 2026</time> <span class="tags">#typst #web</span></p>
+            </header>
+            <p>Typst 0.15 added <em>bundle export</em>: a single project can emit many output files. A page is a <code>document</code>, a raw file is an <code>asset</code>, and one compile writes the entire site.</p>
+            <h2 id="the-shape-of-it"><span class="section-number">1.</span>The shape of it<a href="#the-shape-of-it" class="headerlink" title="Permalink to this section">¶</a></h2>
+            <p>Everything the site emits lives in one entry file:</p>
+            <pre><code data-lang="typst"><span style="color: #4b69c6">#</span><span style="color: #4b69c6">document</span>(<span style="color: #198810">"index.html"</span>, title: <span style="color: #198810">"Home"</span>)[<span style="color: #1d6c76">...</span>]
+<span style="color: #4b69c6">#</span><span style="color: #4b69c6">asset</span>(<span style="color: #198810">"style.css"</span>, <span style="color: #4b69c6">read</span>(<span style="color: #198810">"/assets/style.css"</span>, encoding: <span style="color: #d73948">none</span>))</code></pre>
+            <p>Because the templates build <code>&lt;html></code>, <code>&lt;head></code> and <code>&lt;body></code> by hand, Typst skips its own skeleton and the stylesheet link lands where it belongs.</p>
+            <h2 id="styling"><span class="section-number">2.</span>Styling<a href="#styling" class="headerlink" title="Permalink to this section">¶</a></h2>
+            <p>Typst emits no CSS of its own — deliberately. The markup is semantic and the styling is an ordinary hand-written stylesheet, which is a better division of labour than it first sounds: the content layer never has to know about pixels.</p>
+            <p>One exception: Typst injects a small stylesheet for MathML alignment, so equations like</p>
+            <math display="block">
+              <munderover>
+                <mo lspace="0em">∑</mo>
+                <mrow>
+                  <mi>𝑘</mi>
+                  <mo lspace="0em" rspace="0em">=</mo>
+                  <mn>1</mn>
+                </mrow>
+                <mi>𝑛</mi>
+              </munderover>
+              <mi>𝑘</mi>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mi>𝑛</mi>
+                  <mrow>
+                    <mo>(</mo>
+                    <mrow>
+                      <mi>𝑛</mi>
+                      <mo>+</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mo>)</mo>
+                  </mrow>
+                </mrow>
+                <mn>2</mn>
+              </mfrac>
+            </math>
+            <p>render correctly without any help from us.</p>
+            <h2 id="the-one-rough-edge"><span class="section-number">3.</span>The one rough edge<a href="#the-one-rough-edge" class="headerlink" title="Permalink to this section">¶</a></h2>
+            <p>Typst cannot list a directory, so posts have to be enumerated by hand in <code>content/posts.typ</code>. Two lines per post, and in exchange there is no build script anywhere in the project.</p>
+          </article>
+        </main>
+        <div class="related bottom">
+          <ul>
+            <li class="newer"><a href="../../posts/proving-automata/">← Fun(ctions) with Automata in Lean</a></li>
+            <li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <h1 class="logo"><a href="../../">Arjun's Blog</a></h1>
+      <p class="blurb">Miscellaneous Musings</p>
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../">Home</a></li>
+        <li><a href="../../posts/" class="current">Posts</a></li>
+        <li><a href="../../about/">About</a></li>
+      </ul>
+      <h3>Contents</h3>
+      <ul class="toc">
+        <li class="toc-l1"><a href="#the-shape-of-it"><span class="section-number">1.</span>The shape of it</a></li>
+        <li class="toc-l1"><a href="#styling"><span class="section-number">2.</span>Styling</a></li>
+        <li class="toc-l1"><a href="#the-one-rough-edge"><span class="section-number">3.</span>The one rough edge</a></li>
+      </ul>
+      <h3>Recent posts</h3>
+      <ul class="recent">
+        <li><a href="../../posts/proving-automata/">Fun(ctions) with Automata in Lean</a></li>
+        <li><span class="current">Deploying my blog with typst</span></li>
+        <li><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers</a></li>
+        <li><a href="../../posts/satan-apple/">Just Say No? (to Satan's Apple)</a></li>
+      </ul>
+    </div>
+    <div class="pagefooter">
+      <div class="blogring"><a href="https://kytrinh.me/gathering/arjdroid.me/prev">← prev</a> <a href="https://kytrinh.me/gathering/">gathering</a> <a href="https://kytrinh.me/gathering/arjdroid.me/next">next →</a></div>
+      <div class="footer">© 2026 Arjun Singh · <a href="../../feed.xml">Feed</a> · built with <a href="https://typst.app">Typst</a></div>
+    </div>
+  </body>
+</html>

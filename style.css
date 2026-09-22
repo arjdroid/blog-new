@@ -1,0 +1,575 @@
+/* A close reimplementation of Sphinx's Alabaster theme, using the values from
+   the deployed alabaster.css of leanprover-community.github.io/logic_and_proof.
+   Typst emits semantic markup with no classes of its own, so most rules here
+   are element selectors; the handful of classes come from src/template.typ and
+   src/post.typ. Typst injects its own <style> for MathML alignment — nothing
+   about that belongs here.
+
+   Layout note: <body> is the layout container, because Typst appends footnotes
+   as a <section role="doc-endnotes"> after everything we emit. Grid placement
+   (wide) and flex `order` (narrow) put that section back under the article
+   where it belongs, and anchor the sidebar and footer to the bottom of the
+   viewport when the page is short. */
+
+/* -- page layout ----------------------------------------------------------- */
+
+body {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 17px;
+  background-color: #fff;
+  color: #000;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.bodycontent {
+  color: #3e4349;
+  padding: 0 30px;
+}
+
+.sidebar {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 18px 10px;
+}
+
+.pagefooter {
+  font-size: 14px;
+  color: #888;
+}
+
+.footer {
+  padding: 4px 0 0 0;
+  text-align: right;
+}
+
+.footer a {
+  color: #888;
+}
+
+/* Wide: the sidebar sits in the left margin, and an empty column of the same
+   width mirrors it on the right, so the text column is centred in the window
+   and both margins match. The track is 100ch plus the 60px of horizontal
+   padding that .bodycontent/doc-endnotes subtract back out, so the actual
+   line length is 100ch in both this layout and the narrow one below — it
+   does not compress. The gutters and right margin are the fluid tracks
+   (`minmax(0, …)`), so squeezing the window eats the decorative margins
+   first and switches to the stacked layout the moment there is no margin
+   left to give. That threshold is the one number to tune: sidebar (220px) +
+   text (100ch + 60px, ~910px in Times New Roman at the base 17px) ≈ 1130px,
+   the width at which both margins have hit zero. */
+@media screen and (min-width: 1130px) {
+  body {
+    display: grid;
+    grid-template-columns:
+      minmax(0, 1fr)          /* left gutter */
+      220px                   /* sidebar */
+      calc(100ch + 60px)      /* text column, fixed */
+      minmax(0, 220px)        /* right margin, mirroring the sidebar */
+      minmax(0, 1fr);         /* right gutter */
+    grid-template-rows: auto auto 1fr;
+    padding-top: 30px;
+  }
+
+  .documentwrapper {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  section[role="doc-endnotes"] {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .sidebar {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  /* Sits at the bottom of the viewport on short pages, below the content on
+     long ones. */
+  .pagefooter {
+    grid-column: 2 / 4;
+    grid-row: 3;
+    align-self: end;
+    padding: 20px 30px 30px 10px;
+  }
+}
+
+/* -- sidebar --------------------------------------------------------------- */
+
+.sidebar a {
+  color: #444;
+  text-decoration: none;
+  border-bottom: 1px dotted #999;
+}
+
+.sidebar a:hover {
+  border-bottom: 1px solid #999;
+}
+
+.sidebar h1.logo {
+  font-size: 24px;
+  font-weight: normal;
+  margin: -10px 0 5px 0;
+}
+
+.sidebar h1.logo a {
+  border: none;
+}
+
+.sidebar h3 {
+  font-family: "Times New Roman", Times, serif;
+  color: #444;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 20px 0 5px 0;
+  padding: 0;
+}
+
+.sidebar p {
+  color: #555;
+  margin: 10px 0;
+}
+
+.sidebar p.blurb {
+  margin-top: 0;
+  font-style: normal;
+}
+
+.sidebar ul {
+  margin: 10px 0;
+  padding: 0;
+  list-style: none;
+  color: #000;
+}
+
+.sidebar li {
+  margin-bottom: 2px;
+}
+
+.sidebar .current {
+  font-weight: bold;
+  color: #000;
+}
+
+.sidebar ul.toc .toc-l2 {
+  padding-left: 15px;
+  font-size: 0.95em;
+}
+
+.sidebar ul.toc .toc-l3 {
+  padding-left: 30px;
+  font-size: 0.9em;
+}
+
+.sidebar ul.recent li {
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+/* -- related bars ---------------------------------------------------------- */
+
+.related {
+  line-height: 30px;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.related.top {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 20px;
+}
+
+.related.bottom {
+  border-top: 1px solid #eee;
+  margin-top: 30px;
+}
+
+.related ul {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.related li.older {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* -- blogring -------------------------------------------------------------- */
+
+.blogring {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid #eee;
+}
+
+.blogring .ring-name {
+  color: #555;
+  margin-right: auto;
+}
+
+.blogring a {
+  color: #888;
+}
+
+/* -- footnotes and citations ----------------------------------------------- */
+
+/* Citations render as footnotes (see post-bibliography in src/post.typ), so
+   the reference list is redundant on screen. It stays in the markup —
+   visually hidden rather than display:none — because the footnotes link into
+   it and screen readers should still reach the full entries. */
+section[role="doc-bibliography"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* -- footnotes ------------------------------------------------------------- */
+
+/* Typst emits these; the numbering markup is its own. */
+section[role="doc-endnotes"] {
+  color: #3e4349;
+  font-size: 0.9em;
+  margin-top: 30px;
+  padding: 10px 30px 0 30px;
+  border-top: 1px solid #eee;
+}
+
+section[role="doc-endnotes"] ol {
+  margin: 0;
+  padding: 0;
+}
+
+section[role="doc-endnotes"] li {
+  margin-bottom: 8px;
+}
+
+/* A default <sup> is `vertical-align: super`, which grows the line box and
+   makes any line holding a footnote marker taller than its neighbours. Taking
+   the marker out of the line's height calculation (line-height: 0) and
+   offsetting it with `position: relative` instead keeps the leading even. */
+sup,
+sub {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup[role="doc-noteref"] a,
+sup[role="doc-backlink"] a {
+  text-decoration: none;
+  padding: 0 2px;
+}
+
+/* -- body styles ----------------------------------------------------------- */
+
+a {
+  color: #004b6b;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #6d4100;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+  margin: 30px 0 10px 0;
+  padding: 0;
+}
+
+.bodycontent h1 {
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 240%;
+}
+
+.bodycontent h2 {
+  font-size: 180%;
+}
+
+.bodycontent h3 {
+  font-size: 150%;
+}
+
+.bodycontent h4 {
+  font-size: 130%;
+}
+
+.bodycontent h5,
+.bodycontent h6 {
+  font-size: 100%;
+}
+
+p,
+dd,
+li {
+  line-height: 1.4em;
+}
+
+/* Section numbers, in headings and in the sidebar contents. The gap comes from
+   here rather than the markup so minified output cannot swallow it. */
+.section-number {
+  margin-right: 0.4em;
+}
+
+a.headerlink {
+  color: #ddd;
+  padding: 0 4px;
+  text-decoration: none;
+  visibility: hidden;
+}
+
+h1:hover > a.headerlink,
+h2:hover > a.headerlink,
+h3:hover > a.headerlink,
+h4:hover > a.headerlink,
+h5:hover > a.headerlink,
+h6:hover > a.headerlink {
+  visibility: visible;
+}
+
+a.headerlink:hover {
+  color: #444;
+  background: #eaeaea;
+}
+
+hr {
+  border: 1px solid #b1b4b6;
+}
+
+ul,
+ol {
+  margin: 10px 0 10px 30px;
+  padding: 0;
+}
+
+blockquote {
+  margin: 0 0 0 30px;
+  padding: 0;
+  color: #555;
+}
+
+blockquote p {
+  margin: 10px 0;
+}
+
+dl {
+  margin: 0;
+  padding: 0;
+}
+
+dl dd {
+  margin-left: 30px;
+}
+
+/* -- code, figures, tables, math ------------------------------------------- */
+
+pre,
+code,
+kbd,
+samp {
+  font-family: "JetBrains Mono", Consolas, Menlo, "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-size: 0.8em;
+}
+
+pre {
+  background: rgb(250, 250, 250);
+  padding: 7px 30px;
+  margin: 15px 0;
+  overflow-x: auto;
+  line-height: 1.3em;
+}
+
+code {
+  background-color: #fff;
+  color: #222;
+}
+
+pre code {
+  background: none;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 15px 0;
+}
+
+figcaption {
+  color: #888;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #888;
+  box-shadow: 2px 2px 4px #eee;
+  margin: 15px 0;
+}
+
+th,
+td {
+  border: 1px solid #888;
+  padding: 0.25em 0.7em;
+  text-align: left;
+}
+
+/* Wide equations scroll inside the column rather than widening the page. */
+math[display="block"] {
+  display: block;
+  overflow-x: auto;
+  margin: 15px 0;
+}
+
+/* -- post listings --------------------------------------------------------- */
+
+ul.post-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post-card {
+  margin-bottom: 25px;
+}
+
+.bodycontent .post-card h2 {
+  margin: 0 0 2px 0;
+  font-size: 130%;
+}
+
+.post-card h2 a {
+  text-decoration: none;
+}
+
+.post-card h2 a:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  margin: 0 0 4px 0;
+  color: #888;
+  font-size: 0.85em;
+}
+
+.post-meta .tags {
+  margin-left: 8px;
+}
+
+.post-summary {
+  margin: 0;
+}
+
+.post-header {
+  margin-bottom: 25px;
+}
+
+.post-header .post-meta {
+  margin: 0;
+}
+
+p.blurb {
+  color: #555;
+}
+
+/* -- narrow screens -------------------------------------------------------- */
+
+/* No room for the sidebar beside the text, so it moves below the article —
+   same colours as the rest of the page — and it and the footer are pushed to
+   the bottom of the viewport when the content is short. The article and
+   endnotes keep the same 100ch cap as the wide layout's text column and
+   centre themselves, so crossing the 1130px breakpoint never changes the
+   line width — it only changes whether the sidebar sits beside or below. */
+@media screen and (max-width: 1129px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 30px;
+  }
+
+  .bodycontent {
+    padding: 0;
+  }
+
+  .documentwrapper,
+  section[role="doc-endnotes"] {
+    width: 100%;
+    max-width: 100ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  section[role="doc-endnotes"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .documentwrapper {
+    order: 0;
+  }
+
+  section[role="doc-endnotes"] {
+    order: 1;
+  }
+
+  .sidebar {
+    order: 2;
+    margin-top: auto;
+    padding: 15px 0 0 0;
+    border-top: 1px solid #eee;
+  }
+
+  .pagefooter {
+    order: 3;
+  }
+
+  .footer {
+    text-align: left;
+  }
+
+  ul,
+  ol {
+    margin-left: 20px;
+  }
+}

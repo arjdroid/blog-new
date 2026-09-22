@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Arjun's Blog</title>
+  <subtitle>Miscellaneous Musings</subtitle>
+  <link href="https://arjuns.blog/feed.xml" rel="self"/>
+  <link href="https://arjuns.blog/"/>
+  <id>https://arjuns.blog/</id>
+  <author><name>Arjun Singh</name></author>
+  <updated>2026-06-12T00:00:00Z</updated>
+  <entry>
+    <title>The Right to Data Portability in Health Trackers</title>
+    <link href="https://arjuns.blog/posts/data-portability/"/>
+    <id>https://arjuns.blog/posts/data-portability/</id>
+    <updated>2026-06-12T00:00:00Z</updated>
+    <summary>Pretty obvious if you think about it.</summary>
+  </entry>
+  <entry>
+    <title>Just Say No? (to Satan's Apple)</title>
+    <link href="https://arjuns.blog/posts/satan-apple/"/>
+    <id>https://arjuns.blog/posts/satan-apple/</id>
+    <updated>2026-03-21T00:00:00Z</updated>
+    <summary>Infinite decision theory is weird.</summary>
+  </entry>
+  <entry>
+    <title>Greedy Algorithms and Diachronic Tragedy</title>
+    <link href="https://arjuns.blog/posts/greedy-tragedy/"/>
+    <id>https://arjuns.blog/posts/greedy-tragedy/</id>
+    <updated>2026-02-12T00:00:00Z</updated>
+    <summary>My daemons might not be irrational after all!</summary>
+  </entry>
+</feed>

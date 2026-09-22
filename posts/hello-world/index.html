@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello, world · Arjun's Website</title>
+    <meta name="description" content="A new blog, generated entirely from Typst sources.">
+    <meta name="authors" content="Arjun Singh">
+    <style>
+      /* Alignment */
+      mtable.right-align mtd,
+      mtable mtd.right-align,
+      mtable.left-align mtd.right-align,
+      mtable.aligned mtd:nth-child(odd) {
+        justify-items: end;
+        text-align: right;
+      }
+      mtable.cases mtd,
+      mtable.left-align mtd,
+      mtable mtd.left-align,
+      mtable.aligned mtd:nth-child(even),
+      math:is(:not([display])) > mtable.multiline-equation mtd {
+        justify-items: start;
+        text-align: left;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.left-flush {
+        padding-left: 0;
+      }
+      mtable.cases mtd,
+      mtable.aligned mtd,
+      mtable mtd.flushed,
+      mtable mtd.right-flush {
+        padding-right: 0;
+      }
+      
+      /* Tables */
+      mtable {
+        math-style: inherit;
+      }
+      mtd {
+        math-depth: auto-add;
+        math-style: compact;
+        math-shift: compact;
+      }
+      
+      /* Equations */
+      mtable.multiline-equation mtd {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+        padding: 0;
+      }
+      math > mtable.multiline-equation mtr:not(:last-child) mtd {
+        padding-bottom: 0.5em;
+      }
+      
+      /* Fractions */
+      mfrac {
+        padding-inline: 0;
+        margin-inline: 0.1em;
+      }
+      
+      /* Accents */
+      mover[accent="true" i] > :first-child {
+        font-feature-settings: "dtls";
+      }
+      mover.dotted[accent="true" i] > :first-child {
+        font-feature-settings: "dtls" 0;
+      }
+      
+      /* Other rules for scriptlevel, displaystyle and math-shift */
+      munder > :nth-child(2),
+      munderover > :nth-child(2) {
+        math-shift: compact
+      }
+      munder[accentunder="true" i] > :not(:first-child),
+      mover[accent="true" i] > :not(:first-child) {
+        math-depth: inherit;
+        math-style: inherit;
+        math-shift: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="icon" href="../../favicon.svg">
+    <link rel="alternate" type="application/atom+xml" title="Arjun's Website feed" href="../../feed.xml">
+    <div class="documentwrapper">
+      <div class="bodycontent">
+        <div class="related top">
+          <ul>
+            <li class="newer"><a href="../../posts/typst-as-an-ssg/">← Typst as a static site generator</a></li>
+            <li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li>
+          </ul>
+        </div>
+        <main>
+          <article class="post">
+            <header class="post-header">
+              <h1>Hello, world</h1>
+              <p class="post-meta"><time datetime="2026-08-30">August 30, 2026</time> <span class="tags">#meta</span></p>
+            </header>
+            <p>This blog is written in Typst and compiled to static HTML in a single pass. No JavaScript build pipeline, no Markdown, no front matter — just <code>.typ</code> files and one <code>typst compile</code>.</p>
+            <h2 id="why-typst"><span class="section-number">1.</span>Why Typst<a href="#why-typst" class="headerlink" title="Permalink to this section">¶</a></h2>
+            <p>Typst 0.15 exports genuinely semantic HTML: headings become <code>&lt;h2></code>, lists become <code>&lt;ul></code>, and equations become MathML rather than images. That means the output is selectable, searchable, and readable by screen readers.</p>
+            <p>The same source that produces this page could produce a PDF, which is the part that made the whole idea worth trying.</p>
+            <h2 id="what-is-here"><span class="section-number">2.</span>What is here<a href="#what-is-here" class="headerlink" title="Permalink to this section">¶</a></h2>
+            <p>Not much yet. That is the nice thing about a first post.</p>
+          </article>
+        </main>
+        <div class="related bottom">
+          <ul>
+            <li class="newer"><a href="../../posts/typst-as-an-ssg/">← Typst as a static site generator</a></li>
+            <li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <h1 class="logo"><a href="../../">Arjun's Website</a></h1>
+      <p class="blurb">Miscellaneous Musings</p>
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="../../">Home</a></li>
+        <li><a href="../../posts/" class="current">Posts</a></li>
+        <li><a href="../../about/">About</a></li>
+      </ul>
+      <h3>Contents</h3>
+      <ul class="toc">
+        <li class="toc-l1"><a href="#why-typst"><span class="section-number">1.</span>Why Typst</a></li>
+        <li class="toc-l1"><a href="#what-is-here"><span class="section-number">2.</span>What is here</a></li>
+      </ul>
+      <h3>Recent posts</h3>
+      <ul class="recent">
+        <li><a href="../../posts/proving-automata/">Fun(ctions) with Automata in Lean</a></li>
+        <li><a href="../../posts/typst-as-an-ssg/">Typst as a static site generator</a></li>
+        <li><span class="current">Hello, world</span></li>
+        <li><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers</a></li>
+      </ul>
+    </div>
+    <div class="pagefooter">
+      <div class="blogring"><a href="https://kytrinh.me/gathering/arjdroid.me/prev">← prev</a> <a href="https://kytrinh.me/gathering/">gathering</a> <a href="https://kytrinh.me/gathering/arjdroid.me/next">next →</a></div>
+      <div class="footer">© 2026 Arjun Singh · <a href="../../feed.xml">Feed</a> · built with <a href="https://typst.app">Typst</a></div>
+    </div>
+  </body>
+</html>
