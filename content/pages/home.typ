@@ -26,11 +26,11 @@
   Currently an undergraduate studying Computer Science and Philosophy at UCSD
   ```
 */
-  I have a lot of interests, and I try to enjoy a lot of the good things life has to offer -- like coffee, and pleasant company.
+  I have many interests, and I try to enjoy a lot of the good things life has to offer -- like coffee, and pleasant company.
 
   I am optimistic about humans and technology; I think we can do great feats for great good, and that it is a worthwhile, albeit not easy pursuit.
 
-  I write things here occasionally. I also like taking photos! Here's one of something you might recognise if you've made a visit to the Bay Bridge in San Francisco:
+  I write here occasionally. I also like taking photos! Here's one I took near the Bay Bridge in San Francisco:
 
   #img("DSC06483-bnw-dutch-bow.jpg", alt: "Black and white photograph of a large bow")
 

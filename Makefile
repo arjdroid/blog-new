@@ -33,10 +33,14 @@ clean:
 # working tree's checked-out branch (and its dist/ .gitignore) are untouched.
 # `git fetch` is allowed to fail: on the first-ever deploy gh-pages doesn't
 # exist on the remote yet, so it's created locally as an orphan branch below.
+# The local gh-pages branch is force-reset to origin/gh-pages's tip (not
+# merged — gh-pages is generated output, so upstream changes like a CNAME
+# added via GitHub's UI are best rebuilt on top of, not merged with).
 deploy: build
 	rm -rf .gh-pages-worktree
+	git worktree prune
 	git fetch origin gh-pages 2>/dev/null || true
-	git worktree add .gh-pages-worktree gh-pages 2>/dev/null \
+	git worktree add -B gh-pages .gh-pages-worktree origin/gh-pages 2>/dev/null \
 		|| git worktree add --orphan -b gh-pages .gh-pages-worktree
 	find .gh-pages-worktree -mindepth 1 -maxdepth 1 ! -name .git ! -name CNAME -exec rm -rf {} +
 	cp -r dist/. .gh-pages-worktree/
