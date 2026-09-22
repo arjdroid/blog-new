@@ -10,7 +10,7 @@
 #import "feed.typ": atom-feed
 #import "/content/posts.typ" as posts
 #import "/content/pages/home.typ" as home
-#import "/content/pages/about.typ" as about
+//#import "/content/pages/about.typ" as about
 #import "/content/pages/contact.typ" as contact
 
 #let recent = posts.all.slice(0, calc.min(5, posts.all.len()))
@@ -35,10 +35,11 @@
   #html.ul(class: "post-list", posts.all.map(p => post-card("../", p)).join())
 ]
 
-#emit("about/index.html", title: "About", current: "about")[
+/*#emit("about/index.html", title: "About", current: "about")[
   #html.h1("About")
   #about.body
 ]
+*/
 
 #emit("contact/index.html", title: "Contact", current: "contact")[
   #html.h1("Contact")
@@ -90,7 +91,7 @@
   }
 }
 
-#copy-images("about/", about.images)
+#copy-images("", home.images)
 // #copy-images("contact/", contact.images)
 #for p in posts.all {
   copy-images("posts/" + p.slug + "/", p.at("images", default: ()))

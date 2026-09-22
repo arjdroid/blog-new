@@ -2,7 +2,7 @@
 # --root . is required so src/ can read /assets/*.
 TYPST_FLAGS = --root . --features html,bundle --format bundle
 
-.PHONY: build dev serve clean check
+.PHONY: build dev serve clean check deploy
 
 build:
 	typst compile $(TYPST_FLAGS) src/site.typ dist
@@ -28,3 +28,20 @@ check: dev
 
 clean:
 	rm -rf dist
+
+# Publishes dist/ to the gh-pages branch via a throwaway worktree, so the
+# working tree's checked-out branch (and its dist/ .gitignore) are untouched.
+# `git fetch` is allowed to fail: on the first-ever deploy gh-pages doesn't
+# exist on the remote yet, so it's created locally as an orphan branch below.
+deploy: build
+	rm -rf .gh-pages-worktree
+	git fetch origin gh-pages 2>/dev/null || true
+	git worktree add .gh-pages-worktree gh-pages 2>/dev/null \
+		|| git worktree add --orphan -b gh-pages .gh-pages-worktree
+	find .gh-pages-worktree -mindepth 1 -maxdepth 1 ! -name .git ! -name CNAME -exec rm -rf {} +
+	cp -r dist/. .gh-pages-worktree/
+	find .gh-pages-worktree -name .DS_Store -delete
+	git -C .gh-pages-worktree add -A
+	git -C .gh-pages-worktree commit -m "Deploy $$(date -u +%Y-%m-%dT%H:%M:%SZ)" --allow-empty
+	git -C .gh-pages-worktree push -u origin gh-pages
+	git worktree remove .gh-pages-worktree --force

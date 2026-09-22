@@ -11,6 +11,7 @@ make serve   # rebuild on change + live-reload server on http://localhost:3000
 make dev     # one-off build with readable (--pretty) HTML
 make build   # minified build into dist/
 make check   # build, assert every link is relative, list the output tree
+make deploy  # build, then push dist/ to the gh-pages branch on origin
 make clean
 ```
 
@@ -178,6 +179,16 @@ domain root.
 
 ## Deploying
 
-`dist/` is a plain static directory — serve it from any host. For GitHub Pages,
-publish the `dist/` output (e.g. via an action running `make build`); the
-relative links work from a project subdirectory without configuration.
+`dist/` is a plain static directory — serve it from any host. `make deploy`
+builds and pushes it to the `gh-pages` branch on `origin`, via a throwaway
+`git worktree` so the checked-out branch (and `dist/`'s `.gitignore` entry
+there) are untouched. The `gh-pages` branch is created (orphan, no shared
+history with `main`) on the first run if it doesn't exist yet, locally or on
+the remote. Each deploy is a single commit — history is not accumulated on
+that branch. A `CNAME` file on `gh-pages` (as GitHub Pages writes when you set
+a custom domain there) survives every deploy — it's the one file the wipe
+step skips. The relative links work from a project subdirectory without
+configuration, so this also works unmodified for a GitHub Pages *project*
+site — only a *user/org* site (a custom domain or `<user>.github.io` at the
+root) needs `base-url` in `src/util.typ` set beforehand, since `feed.xml`
+needs absolute URLs.

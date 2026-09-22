@@ -29,7 +29,7 @@
   summary: "My daemons might not be irrational after all!",
   images: ("procrastination.jpg",),
   body: [
-#img("procrastination.jpg", alt: "Procrastination")
+#img("procrastination.jpg", alt: "Laptop in restaurant")
 
 This is going to be a short one but I figure I still want to push _something_ into the aether every month; it's good practice for getting more comfortable writing publicly and without excessive indecision.
 
