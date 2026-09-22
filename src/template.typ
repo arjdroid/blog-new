@@ -54,7 +54,8 @@
   )
 }
 
-// `toc` is a list of (level, text, id) read off the post body.
+// `toc` is a list of (level, text, id) read off the post body, each with an
+// optional `number` when the post's sections are numbered.
 #let sidebar-toc(toc) = {
   if toc == none or toc.len() == 0 { return }
   html.h3("Contents")
@@ -63,7 +64,13 @@
     toc
       .map(h => html.li(
         class: "toc-l" + str(h.level),
-        html.a(href: "#" + h.id, h.text),
+        html.a(
+          href: "#" + h.id,
+          {
+            if "number" in h { html.span(class: "section-number", h.number + ".") }
+            h.text
+          },
+        ),
       ))
       .join(),
   )

@@ -2,13 +2,13 @@
 // Everything here is plain data — no HTML, no layout.
 
 #let site = (
-  title: "Arjun's Website",
+  title: "Arjun's Blog",
   tagline: "Miscellaneous Musings",
   author: "Arjun Singh",
   // Only used to build absolute URLs in feed.xml. Everything the pages
   // themselves link to is relative, so this is the one place a wrong value
   // matters. Set it before publishing.
-  base-url: "https://nxtdroid.win",
+  base-url: "https://arjuns.blog",
   since: 2026,
 )
 

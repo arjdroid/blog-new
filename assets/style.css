@@ -337,6 +337,12 @@ li {
   line-height: 1.4em;
 }
 
+/* Section numbers, in headings and in the sidebar contents. The gap comes from
+   here rather than the markup so minified output cannot swallow it. */
+.section-number {
+  margin-right: 0.4em;
+}
+
 a.headerlink {
   color: #ddd;
   padding: 0 4px;

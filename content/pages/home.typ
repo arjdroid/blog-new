@@ -5,8 +5,9 @@
 #import "/src/post.typ": post-card
 
 #let body(prefix, recent) = [
-  #html.h1("Arjun's Home Page")
-  //#html.p(class: "blurb", site.tagline)
+  #html.h1(site.title)
+  //#html.h1("Arjun's Home Page")
+  #html.p(class: "blurb", site.tagline)
   //#html.h2("Hi, I'm Arjun")
 
   #html.h2("Recent posts")
