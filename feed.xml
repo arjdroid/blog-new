@@ -6,7 +6,14 @@
   <link href="https://arjuns.blog/"/>
   <id>https://arjuns.blog/</id>
   <author><name>Arjun Singh</name></author>
-  <updated>2026-06-12T00:00:00Z</updated>
+  <updated>2026-09-21T00:00:00Z</updated>
+  <entry>
+    <title>Static Site Generation with Typst</title>
+    <link href="https://arjuns.blog/posts/typst-sitegen/"/>
+    <id>https://arjuns.blog/posts/typst-sitegen/</id>
+    <updated>2026-09-21T00:00:00Z</updated>
+    <summary>They said it couldn't be done</summary>
+  </entry>
   <entry>
     <title>The Right to Data Portability in Health Trackers</title>
     <link href="https://arjuns.blog/posts/data-portability/"/>

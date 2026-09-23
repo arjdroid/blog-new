@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Static Site Generation with Typst · Arjun's Blog</title><meta name="description" content="They said it couldn't be done"><meta name="authors" content="Arjun Singh"><style>/* Alignment */
+mtable.right-align mtd,
+mtable mtd.right-align,
+mtable.left-align mtd.right-align,
+mtable.aligned mtd:nth-child(odd) {
+  justify-items: end;
+  text-align: right;
+}
+mtable.cases mtd,
+mtable.left-align mtd,
+mtable mtd.left-align,
+mtable.aligned mtd:nth-child(even),
+math:is(:not([display])) > mtable.multiline-equation mtd {
+  justify-items: start;
+  text-align: left;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.left-flush {
+  padding-left: 0;
+}
+mtable.cases mtd,
+mtable.aligned mtd,
+mtable mtd.flushed,
+mtable mtd.right-flush {
+  padding-right: 0;
+}
+
+/* Tables */
+mtable {
+  math-style: inherit;
+}
+mtd {
+  math-depth: auto-add;
+  math-style: compact;
+  math-shift: compact;
+}
+
+/* Equations */
+mtable.multiline-equation mtd {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+  padding: 0;
+}
+math > mtable.multiline-equation mtr:not(:last-child) mtd {
+  padding-bottom: 0.5em;
+}
+
+/* Fractions */
+mfrac {
+  padding-inline: 0;
+  margin-inline: 0.1em;
+}
+
+/* Accents */
+mover[accent="true" i] > :first-child {
+  font-feature-settings: "dtls";
+}
+mover.dotted[accent="true" i] > :first-child {
+  font-feature-settings: "dtls" 0;
+}
+
+/* Other rules for scriptlevel, displaystyle and math-shift */
+munder > :nth-child(2),
+munderover > :nth-child(2) {
+  math-shift: compact
+}
+munder[accentunder="true" i] > :not(:first-child),
+mover[accent="true" i] > :not(:first-child) {
+  math-depth: inherit;
+  math-style: inherit;
+  math-shift: inherit;
+}</style></head><body><link rel="stylesheet" href="../../style.css"><link rel="icon" href="../../favicon.svg"><link rel="alternate" type="application/atom+xml" title="Arjun's Blog feed" href="../../feed.xml"><div class="documentwrapper"><div class="bodycontent"><div class="related top"><ul><li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li></ul></div><main><article class="post"><header class="post-header"><h1>Static Site Generation with Typst</h1><p class="post-meta"><time datetime="2026-09-21">September 21, 2026</time> <span class="tags">#programming #typst</span></p></header><p>It is no secret that I love <a href="https://typst.app">Typst</a>. I’ve had a blog website for over half a decade now (wow, time sure flies), and I’ve been meaning to write more and more in Typst. For the longest time, <a href="https://arjdroid.me">https://arjdroid.me</a> has been generated with <code>hugo</code> and that uses good ol’ Markdown for individual blog posts. Don’t get me wrong, Markdown is great, and I love it for Obsidian, but I crave more features, as well as a nice standardised syntax, and CommonMark just isn’t it.</p><p>Really, I was initially motivated by the prospect of being able to put out footnotes, and more mathematical-notation-intensive stuff on the web, like my paper on the decision theoretic paradox of Satan’s Apple<sup id="loc-1" role="doc-noteref"><a href="#loc-3">1</a></sup>.</p><p>Still, typsetting academic papers and coursework is one thing, but a website might seem like its pushing it a little, no? I think if we were talking about LaTeX, then sure, but cmon now, this is Typst! It’s basically a full-fledged (functional) programming language that happens to just compile to PDF’s, SVG’s, and now HTML<sup id="loc-2" role="doc-noteref"><a href="#loc-4">2</a></sup>!</p><p>To put a long story short, I messed around with Claude Code and got a pretty neat, workable static site generation workflow completely in Typst. I can make new posts rather easily, and I feel at home using Typst instead of Markdown in <a href="https://helix-editor.com/">Helix</a>. To commemorate the new beginnings of my blogging adventures, I also moved to this new domain that is hopefully easier for people to pronounce.</p><p>Overall, I found it much nicer than Hugo as its a lot more flexible and I know its ins and outs. The styling is taken care of by one giant CSS file, but other than that its all Typst – including the templates which do include some <code>html.elem</code>’s here and there but I try to avoid it if I can.</p><p>I really like that the programming and the typesetting and the content are all in the same language. I even made the favicon in Typst! Here’s an excerpt from <code>src/site.typ</code> to give you an idea of the flexibility of Typst:</p><pre><code data-lang="typc">#<span style="color: #4b69c6">emit</span>(<span style="color: #198810">"contact/index.html"</span>, title: <span style="color: #198810">"Contact"</span>, current: <span style="color: #198810">"contact"</span>)[
+  <span style="color: #8b41b1">#</span><span style="color: #8b41b1">html</span>.<span style="color: #4b69c6">h1</span>(<span style="color: #198810">"Contact"</span>)
+  <span style="color: #8b41b1">#</span><span style="color: #8b41b1">contact</span>.<span style="color: #8b41b1">body</span>
+]
+
+<span style="color: #74747c">// posts.all is newest first, so the previous entry is the newer post.</span>
+#<span style="color: #d73948">for</span> (i, p) <span style="color: #d73948">in</span> posts.all.<span style="color: #4b69c6">enumerate</span>() {
+  <span style="color: #4b69c6">post-page</span>(
+    p,
+    newer: <span style="color: #d73948">if</span> i <span style="color: #d73948">></span> <span style="color: #b60157">0</span> { posts.all.<span style="color: #4b69c6">at</span>(i <span style="color: #d73948">-</span> <span style="color: #b60157">1</span>) },
+    older: <span style="color: #d73948">if</span> i <span style="color: #d73948">+</span> <span style="color: #b60157">1</span> <span style="color: #d73948">&lt;</span> posts.all.<span style="color: #4b69c6">len</span>() { posts.all.<span style="color: #4b69c6">at</span>(i <span style="color: #d73948">+</span> <span style="color: #b60157">1</span>) },
+  )
+}
+
+<span style="color: #74747c">// ── Generated files ─────────────────────────────────────────────────────────</span>
+
+<span style="color: #74747c">// The favicon is a Typst document too: the math font's calligraphic A on a</span>
+<span style="color: #74747c">// white rounded square, so it needs no font at render time and no image editor</span>
+<span style="color: #74747c">// to change. Adjust the glyph, colours or radius here.</span>
+#<span style="color: #d73948">let</span> favicon-art <span style="color: #d73948">=</span> {
+  <span style="color: #d73948">set</span> <span style="color: #4b69c6">page</span>(width: <span style="color: #b60157">32pt</span>, height: <span style="color: #b60157">32pt</span>, margin: <span style="color: #b60157">0pt</span>, fill: <span style="color: #d73948">none</span>)
+  <span style="color: #d73948">set</span> <span style="color: #4b69c6">text</span>(fill: black, size: <span style="color: #b60157">22pt</span>)
+  <span style="color: #4b69c6">box</span>(
+    width: <span style="color: #b60157">100%</span>,
+    height: <span style="color: #b60157">100%</span>,
+    fill: white,
+    radius: <span style="color: #b60157">6pt</span>,
+    <span style="color: #4b69c6">align</span>(center <span style="color: #d73948">+</span> horizon)[<span style="color: #198810">$</span><span style="color: #4b69c6">cal</span>(A)<span style="color: #198810">$</span>],
+  )
+}
+
+#<span style="color: #4b69c6">document</span>(<span style="color: #198810">"favicon.svg"</span>, favicon-art)</code></pre><p>One caveat: Typst warns against using the HTML capabilities for production since they’re still moving fast and breaking things. I look forward to seeing how this goes.</p><p>TODO: add a more detailed breakdown of architectural decisions, though this is highly volatile and subject to change so I’m refraining for now.</p></article></main><div class="related bottom"><ul><li class="older"><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers →</a></li></ul></div></div></div><div class="sidebar"><h1 class="logo"><a href="../../">Arjun's Blog</a></h1><p class="blurb">Miscellaneous Musings</p><h3>Navigation</h3><ul><li><a href="../../">Home</a></li><li><a href="../../posts/" class="current">Posts</a></li><li><a href="../../contact/">Contact</a></li></ul><h3>Recent posts</h3><ul class="recent"><li><span class="current">Static Site Generation with Typst</span></li><li><a href="../../posts/data-portability/">The Right to Data Portability in Health Trackers</a></li><li><a href="../../posts/satan-apple/">Just Say No? (to Satan's Apple)</a></li><li><a href="../../posts/greedy-tragedy/">Greedy Algorithms and Diachronic Tragedy</a></li><li><a href="../../posts/linux-desktop/">The Year of the Linux Desktop</a></li></ul></div><div class="pagefooter"><div class="blogring"><a href="https://kytrinh.me/gathering/arjunsblog/prev">← prev</a> <a href="https://kytrinh.me/gathering/">gathering</a> <a href="https://kytrinh.me/gathering/arjunsblog/next">next →</a></div><div class="footer">© 2026 Arjun Singh · <a href="../../feed.xml">Feed</a> · built with <a href="https://typst.app">Typst</a></div></div><section role="doc-endnotes"><ol style="list-style-type: none"><li id="loc-3"><sup role="doc-backlink"><a href="#loc-1">1</a></sup><a href="/posts/satan-apple">/posts/satan-apple</a></li><li id="loc-4"><sup role="doc-backlink"><a href="#loc-2">2</a></sup>Semantic MathML support and bundle exports as of <code>typst 0.15.1</code></li></ol></section></body></html>
